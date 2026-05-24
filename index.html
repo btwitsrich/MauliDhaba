@@ -15,30 +15,30 @@
 
   <style>
     :root {
-      --bg-dark: #0f090a;
-      --bg-gradient: radial-gradient(circle at 50% 50%, #201214 0%, #0d0607 100%);
-      --panel-bg: rgba(26, 15, 17, 0.75);
-      --card-bg: rgba(38, 22, 24, 0.45);
-      --card-bg-hover: rgba(56, 32, 35, 0.7);
+      --bg-dark: #FFF5F6;
+      --bg-gradient: radial-gradient(circle at 50% 50%, #FFFFFF 0%, #FFE6EA 100%);
+      --panel-bg: rgba(255, 255, 255, 0.75);
+      --card-bg: rgba(255, 255, 255, 0.6);
+      --card-bg-hover: rgba(255, 219, 226, 0.65);
       
-      --accent-red: #A32626;
-      --accent-red-glow: rgba(163, 38, 38, 0.45);
-      --accent-gold: #D4AF37;
-      --accent-gold-gradient: linear-gradient(135deg, #F3E5AB 0%, #D4AF37 50%, #AA771C 100%);
-      --accent-gold-glow: rgba(212, 175, 55, 0.3);
+      --accent-red: #D81B60;
+      --accent-red-glow: rgba(216, 27, 96, 0.18);
+      --accent-gold: #E75480;
+      --accent-gold-gradient: linear-gradient(135deg, #FFF0F2 0%, #FFA8B6 60%, #E75480 100%);
+      --accent-gold-glow: rgba(231, 84, 128, 0.22);
       
-      --text-main: #F5EBE6;
-      --text-muted: #D4C3B3;
-      --text-dark: #201214;
+      --text-main: #3D2226;
+      --text-muted: #7E6367;
+      --text-dark: #FFFFFF;
       
-      --veg-green: #2ECC71;
-      --veg-glow: rgba(46, 204, 113, 0.4);
-      --nonveg-red: #E74C3C;
-      --nonveg-glow: rgba(231, 76, 60, 0.4);
+      --veg-green: #27AE60;
+      --veg-glow: rgba(39, 174, 96, 0.2);
+      --nonveg-red: #C0392B;
+      --nonveg-glow: rgba(192, 57, 43, 0.2);
       
-      --border-light: rgba(212, 175, 55, 0.12);
-      --border-hover: rgba(212, 175, 55, 0.4);
-      --glass-blur: blur(12px);
+      --border-light: rgba(231, 84, 128, 0.16);
+      --border-hover: rgba(231, 84, 128, 0.5);
+      --glass-blur: blur(14px);
     }
 
     * {
@@ -65,10 +65,10 @@
       height: 6px;
     }
     ::-webkit-scrollbar-track {
-      background: rgba(0, 0, 0, 0.2);
+      background: rgba(231, 84, 128, 0.05);
     }
     ::-webkit-scrollbar-thumb {
-      background: rgba(212, 175, 55, 0.2);
+      background: rgba(231, 84, 128, 0.2);
       border-radius: 3px;
     }
     ::-webkit-scrollbar-thumb:hover {
@@ -86,7 +86,7 @@
       justify-content: space-between;
       gap: 20px;
       flex-shrink: 0;
-      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.4);
+      box-shadow: 0 4px 20px rgba(231, 84, 128, 0.08);
       z-index: 10;
     }
 
@@ -173,7 +173,8 @@
       justify-content: space-between;
       gap: 20px;
       padding: 10px 24px;
-      background: rgba(18, 10, 11, 0.8);
+      background: rgba(255, 255, 255, 0.45);
+      backdrop-filter: var(--glass-blur);
       border-bottom: 1px solid var(--border-light);
       flex-shrink: 0;
     }
@@ -418,7 +419,7 @@
       padding: 10px;
       border-radius: 10px;
       border: 1px solid var(--border-light);
-      background: rgba(0, 0, 0, 0.2);
+      background: rgba(255, 255, 255, 0.95);
       font-size: 22px;
       font-weight: 800;
       text-align: center;
@@ -429,8 +430,8 @@
     .quick-add-row input:focus {
       outline: none;
       border-color: var(--accent-gold);
-      background: rgba(0, 0, 0, 0.3);
-      box-shadow: 0 0 10px rgba(212, 175, 55, 0.15);
+      background: rgba(255, 255, 255, 1);
+      box-shadow: 0 0 10px rgba(231, 84, 128, 0.15);
     }
 
     /* Hide arrows from number input */
@@ -472,7 +473,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      background: rgba(0, 0, 0, 0.15);
+      background: rgba(255, 105, 180, 0.08);
     }
 
     .bill-header span {
@@ -615,7 +616,7 @@
     /* Bill Footer */
     .bill-footer {
       padding: 16px;
-      background: rgba(0, 0, 0, 0.3);
+      background: rgba(255, 105, 180, 0.05);
       border-top: 1px solid var(--border-light);
       flex-shrink: 0;
     }
@@ -949,7 +950,8 @@
       display: flex;
       gap: 8px;
       padding: 10px 24px;
-      background: rgba(22, 12, 14, 0.95);
+      background: rgba(255, 255, 255, 0.55);
+      backdrop-filter: var(--glass-blur);
       border-bottom: 1px solid var(--border-light);
       overflow-x: auto;
       flex-shrink: 0;
@@ -1120,12 +1122,12 @@
     }
 
     .dashboard-card.status-running {
-      background: rgba(52, 152, 219, 0.12);
+      background: rgba(52, 152, 219, 0.15);
       border-color: #3498db;
-      box-shadow: 0 0 10px rgba(52, 152, 219, 0.15);
+      box-shadow: 0 4px 15px rgba(52, 152, 219, 0.1);
     }
     .dashboard-card.status-running .card-table-name {
-      color: #3498db;
+      color: #2980b9;
       font-weight: 800;
     }
     .dashboard-card.status-running .card-table-status {
@@ -1134,12 +1136,12 @@
     }
 
     .dashboard-card.status-kot {
-      background: rgba(241, 196, 15, 0.12);
+      background: rgba(241, 196, 15, 0.15);
       border-color: #f1c40f;
-      box-shadow: 0 0 10px rgba(241, 196, 15, 0.15);
+      box-shadow: 0 4px 15px rgba(241, 196, 15, 0.1);
     }
     .dashboard-card.status-kot .card-table-name {
-      color: #f1c40f;
+      color: #d35400;
       font-weight: 800;
     }
     .dashboard-card.status-kot .card-table-status {
@@ -1148,12 +1150,12 @@
     }
 
     .dashboard-card.status-printed {
-      background: rgba(46, 204, 113, 0.12);
+      background: rgba(46, 204, 113, 0.15);
       border-color: #2ecc71;
-      box-shadow: 0 0 10px rgba(46, 204, 113, 0.15);
+      box-shadow: 0 4px 15px rgba(46, 204, 113, 0.1);
     }
     .dashboard-card.status-printed .card-table-name {
-      color: #2ecc71;
+      color: #27ae60;
       font-weight: 800;
     }
     .dashboard-card.status-printed .card-table-status {
@@ -1221,13 +1223,13 @@
       bottom: 72px;
       left: 16px;
       right: 16px;
-      background: rgba(38, 22, 24, 0.95);
+      background: rgba(255, 255, 255, 0.95);
       border: 1px solid var(--accent-gold);
       border-radius: 12px;
       padding: 10px 16px;
       justify-content: space-between;
       align-items: center;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6), 0 0 15px var(--accent-gold-glow);
+      box-shadow: 0 4px 20px rgba(231, 84, 128, 0.15), 0 0 15px var(--accent-gold-glow);
       z-index: 99;
       cursor: pointer;
       animation: fadeInUp 0.3s ease-out;
@@ -1412,13 +1414,13 @@
       }
       .mobile-table-card.has-items {
         border-color: var(--accent-red);
-        box-shadow: 0 0 10px rgba(163, 38, 38, 0.25);
+        box-shadow: 0 0 10px rgba(216, 27, 96, 0.15);
       }
       .mobile-table-card.has-items:not(.active) {
-        background: rgba(163, 38, 38, 0.18);
+        background: rgba(216, 27, 96, 0.08);
       }
       .mobile-table-card.has-items:not(.active) .mobile-table-name {
-        color: #FF7B7B;
+        color: var(--accent-red);
       }
       .mobile-table-name {
         font-size: 14px;
@@ -1522,16 +1524,16 @@
             <option value="T-8">T-8</option>
             <option value="T-9">T-9</option>
             <option value="T-10">T-10</option>
-            <option value="T-11">T-11</option>
-            <option value="T-12">T-12</option>
-            <option value="T-13">T-13</option>
-            <option value="T-14">T-14</option>
-            <option value="T-15">T-15</option>
-            <option value="T-16">T-16</option>
-            <option value="T-17">T-17</option>
-            <option value="T-18">T-18</option>
-            <option value="T-19">T-19</option>
-            <option value="T-20">T-20</option>
+            <option value="N-1">N-1</option>
+            <option value="N-2">N-2</option>
+            <option value="N-3">N-3</option>
+            <option value="N-4">N-4</option>
+            <option value="N-5">N-5</option>
+            <option value="N-6">N-6</option>
+            <option value="N-7">N-7</option>
+            <option value="N-8">N-8</option>
+            <option value="N-9">N-9</option>
+            <option value="N-10">N-10</option>
             <option value="Parcel">Parcel</option>
             <option value="Online">Online</option>
           </select>
@@ -1933,7 +1935,7 @@
       });
     });
 
-    const TABLES = ["T-1", "T-2", "T-3", "T-4", "T-5", "T-6", "T-7", "T-8", "T-9", "T-10", "T-11", "T-12", "T-13", "T-14", "T-15", "T-16", "T-17", "T-18", "T-19", "T-20", "Parcel", "Online"];
+    const TABLES = ["T-1", "T-2", "T-3", "T-4", "T-5", "T-6", "T-7", "T-8", "T-9", "T-10", "N-1", "N-2", "N-3", "N-4", "N-5", "N-6", "N-7", "N-8", "N-9", "N-10", "Parcel", "Online"];
     let tableBills = {};
     let tableWaiters = {};
     let tableStatuses = {};
@@ -2320,10 +2322,9 @@
         `;
         
         // Slice into grids
-        const num = parseInt(t.replace('T-', ''));
-        if (t.startsWith('T-') && num >= 1 && num <= 10) {
+        if (t.startsWith('T-')) {
           acHtml += cardHtml;
-        } else if (t.startsWith('T-') && num >= 11 && num <= 20) {
+        } else if (t.startsWith('N-')) {
           nonAcHtml += cardHtml;
         } else {
           quickHtml += cardHtml;
@@ -2432,8 +2433,8 @@
       document.getElementById('rGrandTotal').textContent = '₹' + grandTotal.toFixed(2);
 
       // Generate dynamic UPI Payment QR Code
-      const upiId = localStorage.getItem('mauliUpiId') || 'pay@maulidhaba';
-      const merchantName = localStorage.getItem('mauliMerchantName') || '॥ माउली ढाबा ॥';
+      const upiId = localStorage.getItem('mauliUpiId') || 'Q656762112@ybl';
+      const merchantName = localStorage.getItem('mauliMerchantName') || 'MAULI DHABA';
       
       const upiUri = `upi://pay?pa=${upiId}&pn=${encodeURIComponent(merchantName)}&am=${grandTotal.toFixed(2)}&tn=${encodeURIComponent('Bill ' + billNo)}&cu=INR`;
       const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(upiUri)}`;
@@ -2533,10 +2534,10 @@
 
     // Settings Configuration Management
     function loadSettings() {
-      const upi = localStorage.getItem('mauliUpiId') || 'pay@maulidhaba';
-      const name = localStorage.getItem('mauliMerchantName') || '॥ माउली ढाबा ॥';
+      const upi = localStorage.getItem('mauliUpiId') || 'Q656762112@ybl';
+      const name = localStorage.getItem('mauliMerchantName') || 'MAULI DHABA';
       const phone = localStorage.getItem('mauliPhone') || '7261915663 / 8149731389';
-      const whatsapp = localStorage.getItem('mauliWhatsApp') || '';
+      const whatsapp = localStorage.getItem('mauliWhatsApp') || '8149731389';
       
       document.getElementById('settingUpiId').value = upi;
       document.getElementById('settingMerchantName').value = name;
@@ -2594,9 +2595,9 @@
       const waiterName = tableWaiters[currentTable] || '—';
       const grandTotal = bill.reduce((s, b) => s + (b.price * b.qty), 0);
       const date = document.getElementById('rDate').textContent;
-      const shopName = localStorage.getItem('mauliMerchantName') || '॥ माउली ढाबा ॥';
+      const shopName = localStorage.getItem('mauliMerchantName') || 'MAULI DHABA';
       const phoneNo = localStorage.getItem('mauliPhone') || '7261915663';
-      const bizNumber = localStorage.getItem('mauliWhatsApp') || '';
+      const bizNumber = localStorage.getItem('mauliWhatsApp') || '8149731389';
       
       let text = `🍛 *${shopName}* 🍛\n`;
       text += `_Khalapur, Raigad · Since 1991_\n`;
@@ -2615,7 +2616,7 @@
       text += `💰 *TOTAL PAYABLE:* *₹${grandTotal.toFixed(2)}*\n`;
       text += `=========================\n`;
       
-      const upiId = localStorage.getItem('mauliUpiId') || 'pay@maulidhaba';
+      const upiId = localStorage.getItem('mauliUpiId') || 'Q656762112@ybl';
       text += `📲 *Pay Online via UPI:* \n`;
       text += `UPI ID: ${upiId}\n\n`;
       text += `🙏 *Thank you for dining with us!* 🙏\n`;
