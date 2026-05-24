@@ -1626,6 +1626,17 @@
       
       <!-- Sidebar Footer Sum Calculations -->
       <div class="bill-footer">
+        <!-- Customer Info Section -->
+        <div style="display: flex; gap: 8px; margin-bottom: 12px; border-bottom: 1px solid var(--border-light); padding-bottom: 12px;">
+          <div class="meta-field" style="flex: 1;">
+            <label style="font-size: 8px; color: var(--accent-gold); font-weight: 700; text-transform: uppercase;">Customer Name</label>
+            <input type="text" id="custName" placeholder="Name" style="width: 100%; text-align: left; padding: 6px 10px; font-size: 12px;" oninput="updateCustomerName(this.value)">
+          </div>
+          <div class="meta-field" style="flex: 1;">
+            <label style="font-size: 8px; color: var(--accent-gold); font-weight: 700; text-transform: uppercase;">Mobile No. (WhatsApp)</label>
+            <input type="tel" id="custPhone" placeholder="10-digit Phone" style="width: 100%; text-align: left; padding: 6px 10px; font-size: 12px;" maxlength="10" oninput="updateCustomerPhone(this.value)">
+          </div>
+        </div>
         <div class="footer-row">
           <span>Total Quantity</span>
           <span id="itemCount" style="font-weight: 600; color: var(--text-main);">0 items</span>
@@ -1937,6 +1948,7 @@
     let tableBills = {};
     let tableWaiters = {};
     let tableStatuses = {};
+    let tableCustomers = {};
     let currentTable = "T-1";
     let bill = []; // Always points to the current table's bill
     let activeFilter = "All";
@@ -1979,6 +1991,13 @@
         TABLES.forEach(t => tableStatuses[t] = 'blank');
       }
 
+      const savedTableCustomers = localStorage.getItem('mauliTableCustomers');
+      if (savedTableCustomers) {
+        tableCustomers = JSON.parse(savedTableCustomers);
+      } else {
+        TABLES.forEach(t => tableCustomers[t] = { name: '', phone: '' });
+      }
+
       // Safeguard: Make sure any table with items is marked as 'running'
       TABLES.forEach(t => {
         if ((tableBills[t] || []).length > 0 && (!tableStatuses[t] || tableStatuses[t] === 'blank')) {
@@ -1992,6 +2011,8 @@
       // Set UI values
       document.getElementById('tableNo').value = currentTable;
       document.getElementById('waiterName').value = tableWaiters[currentTable] || '';
+      document.getElementById('custName').value = tableCustomers[currentTable]?.name || '';
+      document.getElementById('custPhone').value = tableCustomers[currentTable]?.phone || '';
 
       if (savedBillNo) {
         document.getElementById('billNo').value = savedBillNo;
@@ -2023,6 +2044,7 @@
       localStorage.setItem('mauliTableBills', JSON.stringify(tableBills));
       localStorage.setItem('mauliTableWaiters', JSON.stringify(tableWaiters));
       localStorage.setItem('mauliTableStatuses', JSON.stringify(tableStatuses));
+      localStorage.setItem('mauliTableCustomers', JSON.stringify(tableCustomers));
       localStorage.setItem('mauliCurrentTable', currentTable);
       localStorage.setItem('mauliCurrentBillNo', document.getElementById('billNo').value);
     }
@@ -2047,6 +2069,8 @@
       // Sync inputs
       document.getElementById('tableNo').value = currentTable;
       document.getElementById('waiterName').value = tableWaiters[currentTable] || '';
+      document.getElementById('custName').value = tableCustomers[currentTable]?.name || '';
+      document.getElementById('custPhone').value = tableCustomers[currentTable]?.phone || '';
       
       const indicator = document.getElementById('mobileTableIndicator');
       if (indicator) indicator.textContent = '📍 ' + currentTable;
@@ -2059,6 +2083,22 @@
 
     function updateWaiterName(val) {
       tableWaiters[currentTable] = val;
+      backupCurrentBill();
+    }
+
+    function updateCustomerName(val) {
+      if (!tableCustomers[currentTable]) {
+        tableCustomers[currentTable] = { name: '', phone: '' };
+      }
+      tableCustomers[currentTable].name = val;
+      backupCurrentBill();
+    }
+
+    function updateCustomerPhone(val) {
+      if (!tableCustomers[currentTable]) {
+        tableCustomers[currentTable] = { name: '', phone: '' };
+      }
+      tableCustomers[currentTable].phone = val;
       backupCurrentBill();
     }
 
@@ -2511,7 +2551,76 @@
     }
 
     function finalizeSettlement(method) {
+      if (!bill.length) {
+        alert("Cannot settle: Order is empty!");
+        return;
+      }
+
       const grandTotal = bill.reduce((s, b) => s + (b.price * b.qty), 0);
+      
+      // Auto-share WhatsApp receipt compiling logic
+      let phone = (tableCustomers[currentTable]?.phone || '').trim();
+      const bizNumber = localStorage.getItem('mauliWhatsApp') || '8149731389';
+      let targetNum = phone;
+      let shouldShare = true;
+
+      if (!targetNum) {
+        const entered = prompt("Enter customer mobile number (10-digit) to auto-send receipt via WhatsApp (or leave blank to send to official business number):", bizNumber);
+        if (entered !== null) {
+          targetNum = entered.trim() || bizNumber;
+        } else {
+          shouldShare = false; // User cancelled
+        }
+      }
+
+      if (shouldShare && targetNum) {
+        let cleanPhone = targetNum.replace(/\D/g, '');
+        if (cleanPhone.length === 10) {
+          cleanPhone = '91' + cleanPhone;
+        }
+
+        const billNo = document.getElementById('billNo').value || 'MD-1000';
+        const tableNo = currentTable || '—';
+        const waiterName = tableWaiters[currentTable] || '—';
+        const date = new Date().toLocaleString('en-IN', {
+          day: '2-digit',
+          month: 'short',
+          year: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit',
+          hour12: true
+        });
+        const shopName = localStorage.getItem('mauliMerchantName') || 'MAULI DHABA';
+        const phoneNo = localStorage.getItem('mauliPhone') || '7261915663 / 8149731389';
+        
+        let text = `🍛 *${shopName}* 🍛\n`;
+        text += `_Khalapur, Raigad · Since 1991_\n`;
+        text += `=========================\n`;
+        text += `🧾 *Bill No:* ${billNo}\n`;
+        text += `📍 *Table No:* ${tableNo}\n`;
+        text += `🤵 *Waiter:* ${waiterName}\n`;
+        text += `📅 *Date:* ${date}\n`;
+        text += `=========================\n`;
+        
+        bill.forEach(b => {
+          text += `• ${b.name}\n  ${b.qty} x ₹${b.price.toFixed(2)} = *₹${(b.price * b.qty).toFixed(2)}*\n`;
+        });
+        
+        text += `=========================\n`;
+        text += `💰 *TOTAL PAYABLE:* *₹${grandTotal.toFixed(2)}*\n`;
+        text += `=========================\n`;
+        
+        const upiId = localStorage.getItem('mauliUpiId') || 'Q656762112@ybl';
+        text += `📲 *Pay Online via UPI:* \n`;
+        text += `UPI ID: ${upiId}\n\n`;
+        text += `🙏 *Thank you for dining with us!* 🙏\n`;
+        text += `Please visit again!\n`;
+        text += `_Contact: ${phoneNo}_`;
+
+        const waUrl = `https://api.whatsapp.com/send?phone=${cleanPhone}&text=${encodeURIComponent(text)}`;
+        window.open(waUrl, '_blank');
+      }
+
       alert(`🎉 Table ${currentTable} has been successfully settled for ₹${grandTotal.toFixed(2)} via ${method}!\nTable is now available (empty).`);
       
       // Clear order and reset status to blank
@@ -2519,7 +2628,11 @@
       tableBills[currentTable] = [];
       tableWaiters[currentTable] = '';
       tableStatuses[currentTable] = 'blank';
+      tableCustomers[currentTable] = { name: '', phone: '' };
+      
       document.getElementById('waiterName').value = '';
+      document.getElementById('custName').value = '';
+      document.getElementById('custPhone').value = '';
       
       renderBill();
       renderTablesDashboard();
