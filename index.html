@@ -15,20 +15,20 @@
 
   <style>
     :root {
-      --bg-dark: #FFF5F6;
-      --bg-gradient: radial-gradient(circle at 50% 50%, #FFFFFF 0%, #FFE6EA 100%);
-      --panel-bg: rgba(255, 255, 255, 0.75);
-      --card-bg: rgba(255, 255, 255, 0.6);
-      --card-bg-hover: rgba(255, 219, 226, 0.65);
+      --bg-dark: #F8F9FA;
+      --bg-gradient: radial-gradient(circle at 50% 50%, #FFFFFF 0%, #E9ECEF 100%);
+      --panel-bg: rgba(255, 255, 255, 0.8);
+      --card-bg: rgba(255, 255, 255, 0.55);
+      --card-bg-hover: rgba(233, 236, 239, 0.7);
       
-      --accent-red: #D81B60;
-      --accent-red-glow: rgba(216, 27, 96, 0.18);
-      --accent-gold: #E75480;
-      --accent-gold-gradient: linear-gradient(135deg, #FFF0F2 0%, #FFA8B6 60%, #E75480 100%);
-      --accent-gold-glow: rgba(231, 84, 128, 0.22);
+      --accent-red: #C0392B;
+      --accent-red-glow: rgba(192, 57, 43, 0.15);
+      --accent-gold: #343A40;
+      --accent-gold-gradient: linear-gradient(135deg, #495057 0%, #343A40 60%, #212529 100%);
+      --accent-gold-glow: rgba(52, 58, 64, 0.18);
       
-      --text-main: #3D2226;
-      --text-muted: #7E6367;
+      --text-main: #1A1D20;
+      --text-muted: #495057;
       --text-dark: #FFFFFF;
       
       --veg-green: #27AE60;
@@ -36,8 +36,8 @@
       --nonveg-red: #C0392B;
       --nonveg-glow: rgba(192, 57, 43, 0.2);
       
-      --border-light: rgba(231, 84, 128, 0.16);
-      --border-hover: rgba(231, 84, 128, 0.5);
+      --border-light: rgba(0, 0, 0, 0.08);
+      --border-hover: rgba(0, 0, 0, 0.25);
       --glass-blur: blur(14px);
     }
 
@@ -473,7 +473,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      background: rgba(255, 105, 180, 0.08);
+      background: rgba(0, 0, 0, 0.04);
     }
 
     .bill-header span {
@@ -616,7 +616,7 @@
     /* Bill Footer */
     .bill-footer {
       padding: 16px;
-      background: rgba(255, 105, 180, 0.05);
+      background: rgba(0, 0, 0, 0.02);
       border-top: 1px solid var(--border-light);
       flex-shrink: 0;
     }
@@ -1414,10 +1414,10 @@
       }
       .mobile-table-card.has-items {
         border-color: var(--accent-red);
-        box-shadow: 0 0 10px rgba(216, 27, 96, 0.15);
+        box-shadow: 0 0 10px rgba(108, 117, 125, 0.15);
       }
       .mobile-table-card.has-items:not(.active) {
-        background: rgba(216, 27, 96, 0.08);
+        background: rgba(108, 117, 125, 0.08);
       }
       .mobile-table-card.has-items:not(.active) .mobile-table-name {
         color: var(--accent-red);
