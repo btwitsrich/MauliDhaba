@@ -1862,6 +1862,14 @@
       ]}
     ];
 
+    let allItems = [];
+    let counter = 1;
+    menuData.forEach(cat => {
+      cat.items.forEach(([name, price]) => {
+        allItems.push({id: counter++, name, price, type: cat.type, cat: cat.cat, emoji: cat.emoji});
+      });
+    });
+
     const TABLES = ["T-1", "T-2", "T-3", "T-4", "T-5", "T-6", "T-7", "T-8", "T-9", "T-10", "Parcel", "Online"];
     let tableBills = {};
     let tableWaiters = {};
