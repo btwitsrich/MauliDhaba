@@ -921,6 +921,346 @@
       color: var(--text-dark);
     }
 
+    /* Share Receipt button style */
+    .btn-action-share {
+      flex: 1;
+      padding: 12px;
+      border-radius: 8px;
+      border: none;
+      background: linear-gradient(135deg, #1d9d4f 0%, #0f6c34 100%);
+      color: var(--text-main);
+      font-weight: 700;
+      font-size: 12px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all 0.25s;
+      box-shadow: 0 4px 15px rgba(29, 157, 79, 0.25);
+    }
+    .btn-action-share:hover {
+      filter: brightness(1.15);
+      box-shadow: 0 4px 20px rgba(29, 157, 79, 0.4);
+    }
+
+    /* Desktop tables-bar horizontal scrollbar */
+    .tables-bar {
+      display: flex;
+      gap: 8px;
+      padding: 10px 24px;
+      background: rgba(22, 12, 14, 0.95);
+      border-bottom: 1px solid var(--border-light);
+      overflow-x: auto;
+      flex-shrink: 0;
+    }
+    .table-tab-card {
+      min-width: 90px;
+      padding: 8px 12px;
+      border-radius: 8px;
+      border: 1px solid var(--border-light);
+      background: var(--card-bg);
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.3s ease;
+    }
+    .table-tab-card:hover {
+      border-color: var(--accent-gold);
+      background: var(--card-bg-hover);
+    }
+    .table-tab-card.active {
+      background: var(--accent-gold-gradient);
+      border-color: transparent;
+      box-shadow: 0 0 10px var(--accent-gold-glow);
+    }
+    .table-tab-card.active .table-tab-name {
+      color: var(--text-dark);
+      font-weight: 800;
+    }
+    .table-tab-card.active .table-tab-status {
+      color: rgba(32, 18, 20, 0.8);
+      font-weight: 700;
+    }
+    .table-tab-card.has-items {
+      border-color: var(--accent-red);
+      box-shadow: 0 0 8px rgba(163, 38, 38, 0.2);
+    }
+    .table-tab-card.has-items:not(.active) {
+      background: rgba(163, 38, 38, 0.15);
+    }
+    .table-tab-card.has-items:not(.active) .table-tab-name {
+      color: #FF7B7B;
+    }
+    .table-tab-name {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+    }
+    .table-tab-status {
+      font-size: 9px;
+      color: var(--accent-gold);
+      font-weight: 600;
+    }
+
+    /* Settings Button Styling */
+    .settings-btn {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-light);
+      color: var(--accent-gold);
+      font-size: 16px;
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+      flex-shrink: 0;
+    }
+    .settings-btn:hover {
+      border-color: var(--accent-gold);
+      background: rgba(255, 255, 255, 0.1);
+      box-shadow: 0 0 8px var(--accent-gold-glow);
+      transform: rotate(45deg);
+    }
+
+    /* Mobile Responsive bottom navigation bar */
+    .bottom-nav {
+      display: none;
+    }
+
+    .mobile-tables-view {
+      display: none;
+    }
+
+    @media (max-width: 768px) {
+      /* Hide desktop headers/controls/tables bar by default */
+      .tables-bar {
+        display: none !important;
+      }
+      .header-right {
+        display: flex !important;
+        gap: 8px !important;
+      }
+      /* Hide redundancy metadata inputs from mobile header */
+      .header-right .bill-meta {
+        display: none !important;
+      }
+      
+      .controls-strip {
+        padding: 8px 16px;
+        flex-direction: column;
+        gap: 8px;
+        align-items: stretch;
+      }
+      .search-wrap {
+        width: 100%;
+      }
+      
+      .main {
+        flex: 1;
+        flex-direction: column;
+        overflow: hidden; /* Prevent body scroll, let children scroll */
+        margin-bottom: 60px; /* Space for bottom nav */
+      }
+      
+      /* Panels show/hide logic based on mobile body classes */
+      .left-panel, .right-panel, .mobile-tables-view {
+        width: 100% !important;
+        display: none !important;
+        border: none !important;
+        box-shadow: none !important;
+      }
+      
+      body.mobile-tab-tables .mobile-tables-view {
+        display: flex !important;
+        flex-direction: column;
+        padding: 16px;
+        gap: 16px;
+        height: 100%;
+        overflow-y: auto;
+      }
+      
+      body.mobile-tab-menu .left-panel {
+        display: flex !important;
+        flex-direction: column;
+        height: 100%;
+        overflow-y: auto;
+      }
+      
+      body.mobile-tab-menu .controls-strip {
+        display: flex !important;
+      }
+      
+      body:not(.mobile-tab-menu) .controls-strip {
+        display: none !important;
+      }
+      
+      body.mobile-tab-order .right-panel {
+        display: flex !important;
+        flex-direction: column;
+        height: 100%;
+        overflow-y: auto;
+      }
+      
+      /* Bottom Nav Bar Styles */
+      .bottom-nav {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 60px;
+        background: var(--panel-bg);
+        backdrop-filter: var(--glass-blur);
+        border-top: 1px solid var(--border-light);
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        z-index: 100;
+        box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.4);
+      }
+      .nav-item {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 4px;
+        cursor: pointer;
+        width: 100%;
+        height: 100%;
+        transition: all 0.3s ease;
+        position: relative;
+      }
+      .nav-item.active {
+        color: var(--accent-gold);
+      }
+      .nav-icon {
+        font-size: 18px;
+      }
+      .nav-label {
+        font-size: 10px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+      .nav-badge {
+        position: absolute;
+        top: 6px;
+        right: 25%;
+        background: var(--accent-red);
+        color: white;
+        font-size: 9px;
+        font-weight: 800;
+        border-radius: 50%;
+        min-width: 16px;
+        height: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid var(--bg-dark);
+      }
+      
+      /* Mobile Tables Grid Styles */
+      .mobile-tables-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+        padding-bottom: 20px;
+      }
+      .mobile-table-card {
+        background: var(--card-bg);
+        border: 1px solid var(--border-light);
+        border-radius: 12px;
+        padding: 14px 8px;
+        text-align: center;
+        cursor: pointer;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        transition: all 0.3s ease;
+      }
+      .mobile-table-card:active {
+        transform: scale(0.95);
+      }
+      .mobile-table-card.active {
+        background: var(--accent-gold-gradient);
+        border-color: transparent;
+        box-shadow: 0 0 12px var(--accent-gold-glow);
+      }
+      .mobile-table-card.active .mobile-table-name {
+        color: var(--text-dark);
+        font-weight: 800;
+      }
+      .mobile-table-card.active .mobile-table-status {
+        color: rgba(32, 18, 20, 0.8);
+        font-weight: 700;
+      }
+      .mobile-table-card.has-items {
+        border-color: var(--accent-red);
+        box-shadow: 0 0 10px rgba(163, 38, 38, 0.25);
+      }
+      .mobile-table-card.has-items:not(.active) {
+        background: rgba(163, 38, 38, 0.18);
+      }
+      .mobile-table-card.has-items:not(.active) .mobile-table-name {
+        color: #FF7B7B;
+      }
+      .mobile-table-name {
+        font-size: 14px;
+        font-weight: 700;
+        color: var(--text-main);
+      }
+      .mobile-table-status {
+        font-size: 10px;
+        color: var(--accent-gold);
+        font-weight: 600;
+      }
+
+      /* Item Grid Mobile scaling */
+      .items-grid {
+        grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+        gap: 8px;
+      }
+      .item-card {
+        padding: 8px 10px;
+        gap: 8px;
+      }
+      .item-num {
+        min-width: 24px;
+        height: 22px;
+        font-size: 10px;
+        border-radius: 4px;
+      }
+      .item-name {
+        font-size: 11px;
+      }
+      .item-price {
+        font-size: 11px;
+      }
+      
+      /* Receipt Modal Mobile adjustments */
+      .modal-container {
+        width: 95%;
+        max-height: 85vh;
+      }
+      .receipt-paper-wrap {
+        padding: 16px 12px;
+        font-size: 11px;
+      }
+      .receipt-title {
+        font-size: 16px;
+      }
+    }
+
     /* Print styling rules */
     @media print {
       body * {
@@ -947,11 +1287,16 @@
 
   <!-- Top Navigation Header -->
   <div class="header">
-    <div class="header-left">
-      <h1>॥ माउली ढाबा ॥</h1>
-      <p>Khalapur, Dist. Raigad · Since 1991</p>
+    <div class="header-left" style="display: flex; align-items: center; gap: 12px;">
+      <div>
+        <h1 class="receipt-title-setting" style="font-family: 'Cinzel', serif; font-size: 26px; font-weight: 900; background: var(--accent-gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: 2px; filter: drop-shadow(0 2px 8px var(--accent-gold-glow));">॥ माउली ढाबा ॥</h1>
+        <p>Khalapur, Dist. Raigad · Since 1991</p>
+      </div>
     </div>
-    <div class="header-right">
+    <div class="header-right" style="display: flex; align-items: center; gap: 12px;">
+      <!-- Mobile Table Indicator Pill (visible only on mobile) -->
+      <span class="mobile-table-pill" style="display: none; font-size: 11px; font-weight: 800; background: rgba(212,175,55,0.15); border: 1px solid var(--accent-gold); color: var(--accent-gold); padding: 6px 12px; border-radius: 20px;" id="mobileTableIndicator">📍 T-1</span>
+      
       <div class="bill-meta">
         <div class="meta-field">
           <label>Bill No.</label>
@@ -959,7 +1304,7 @@
         </div>
         <div class="meta-field">
           <label>Table No.</label>
-          <select id="tableNo" onchange="backupCurrentBill()">
+          <select id="tableNo" onchange="switchTable(this.value)">
             <option value="">Select</option>
             <option value="T-1">T-1</option>
             <option value="T-2">T-2</option>
@@ -977,11 +1322,17 @@
         </div>
         <div class="meta-field">
           <label>Waiter</label>
-          <input type="text" id="waiterName" placeholder="Name" style="width: 100px;" oninput="backupCurrentBill()">
+          <input type="text" id="waiterName" placeholder="Name" style="width: 100px;" oninput="updateWaiterName(this.value)">
         </div>
       </div>
+      
+      <!-- Settings gear icon -->
+      <button class="settings-btn" onclick="openSettingsModal()" title="Settings">⚙️</button>
     </div>
   </div>
+
+  <!-- Desktop active tables horizontal bar -->
+  <div class="tables-bar" id="tablesBar"></div>
 
   <!-- Sub-header Filtering & Searching Controls -->
   <div class="controls-strip">
@@ -994,6 +1345,15 @@
 
   <!-- Main POS Interface split in two panes -->
   <div class="main">
+    <!-- Mobile Tables Dashboard (shown in tables tab on mobile) -->
+    <div class="mobile-tables-view" id="mobileTablesView">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+        <h2 style="font-family: 'Cinzel', serif; font-size: 18px; color: var(--accent-gold); margin: 0;">Restaurant Tables</h2>
+        <span style="font-size: 11px; font-weight: 700; background: rgba(212,175,55,0.1); color: var(--accent-gold); border: 1px solid var(--border-light); padding: 4px 10px; border-radius: 8px;" id="activeTablesCountText">Active: 0 / 12</span>
+      </div>
+      <div class="mobile-tables-grid" id="mobileTablesGrid"></div>
+    </div>
+
     <!-- Left Panel: Responsive Grid of Food Cards -->
     <div class="left-panel" id="menuPanel"></div>
 
@@ -1097,6 +1457,14 @@
             </tr>
           </table>
           
+          <!-- Dynamic UPI Payment QR Code Section -->
+          <div class="receipt-divider"></div>
+          <div id="receiptQrContainer" style="display: flex; flex-direction: column; align-items: center; margin: 10px 0; text-align: center;">
+            <div style="font-size: 10px; font-weight: bold; margin-bottom: 6px; letter-spacing: 0.5px; color: #111;">SCAN TO PAY ONLINE</div>
+            <img id="receiptQrImg" src="" style="width: 130px; height: 130px; border: 1px solid #ddd; padding: 4px; background: white;" alt="UPI QR Code">
+            <div style="font-size: 8px; color: #555; margin-top: 4px; font-weight: 600;">BHIM UPI · GPAY · PHONEPE · PAYTM</div>
+          </div>
+          
           <div class="receipt-divider"></div>
           
           <div class="receipt-footer">
@@ -1108,6 +1476,10 @@
 
       </div>
       <div class="modal-footer">
+        <button class="btn-action-share" onclick="shareBillReceipt()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+          📲 Share Bill
+        </button>
         <button class="btn-action-download" onclick="downloadPDFReceipt()">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
           Save PDF File
@@ -1118,6 +1490,53 @@
         </button>
       </div>
     </div>
+  </div>
+
+  <!-- Settings Config Modal -->
+  <div class="modal-overlay" id="settingsModal">
+    <div class="modal-container" style="width: 380px;">
+      <div class="modal-header">
+        <h3>⚙️ POS Configuration Settings</h3>
+        <button class="modal-close" onclick="closeSettingsModal()">×</button>
+      </div>
+      <div class="modal-body" style="background: #1c1315; padding: 20px; flex-direction: column; gap: 16px; align-items: stretch; display: flex;">
+        <div class="meta-field" style="align-items: stretch; display: flex; flex-direction: column; gap: 4px;">
+          <label style="margin-bottom: 2px;">Merchant UPI ID (for QR Code)</label>
+          <input type="text" id="settingUpiId" placeholder="e.g. btwitsrich@okaxis" style="text-align: left; background: rgba(0,0,0,0.25);">
+          <span style="font-size: 9px; color: var(--text-muted); margin-top: 2px; text-transform: none; opacity: 0.8;">Used to generate the dynamic scan-to-pay QR code on invoices.</span>
+        </div>
+        <div class="meta-field" style="align-items: stretch; display: flex; flex-direction: column; gap: 4px;">
+          <label style="margin-bottom: 2px;">Restaurant Name</label>
+          <input type="text" id="settingMerchantName" placeholder="॥ माउली ढाबा ॥" style="text-align: left; background: rgba(0,0,0,0.25);">
+        </div>
+        <div class="meta-field" style="align-items: stretch; display: flex; flex-direction: column; gap: 4px;">
+          <label style="margin-bottom: 2px;">Restaurant Phone Numbers</label>
+          <input type="text" id="settingPhone" placeholder="7261915663 / 8149731389" style="text-align: left; background: rgba(0,0,0,0.25);">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-clear" onclick="closeSettingsModal()" style="flex: 1;">Cancel</button>
+        <button class="btn-print" onclick="saveSettings()" style="flex: 1;">Save Settings</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile Bottom Navigation Bar -->
+  <div class="bottom-nav">
+    <button class="nav-item active" onclick="switchMobileTab('tables')">
+      <span class="nav-icon">🗂️</span>
+      <span class="nav-label">Tables</span>
+      <span class="nav-badge" id="mobileActiveTablesBadge" style="display: none;">0</span>
+    </button>
+    <button class="nav-item" onclick="switchMobileTab('menu')">
+      <span class="nav-icon">🍽️</span>
+      <span class="nav-label">Menu</span>
+    </button>
+    <button class="nav-item" onclick="switchMobileTab('order')">
+      <span class="nav-icon">🛒</span>
+      <span class="nav-label">Order</span>
+      <span class="nav-badge" id="mobileOrderBadge" style="display: none;">0</span>
+    </button>
   </div>
 
   <script>
@@ -1221,31 +1640,59 @@
       });
     });
 
-    let bill = [];
+    const TABLES = ["T-1", "T-2", "T-3", "T-4", "T-5", "T-6", "T-7", "T-8", "T-9", "T-10", "Parcel", "Online"];
+    let tableBills = {};
+    let tableWaiters = {};
+    let currentTable = "T-1";
+    let bill = []; // Always points to the current table's bill
     let activeFilter = "All";
     let billCounter = parseInt(localStorage.getItem('mauliBillNo') || '1000');
+    let activeMobileTab = 'tables';
 
     // Retrieve active billing state from localStorage if exists
     function loadSavedBill() {
-      const savedBill = localStorage.getItem('mauliCurrentBill');
-      const savedTable = localStorage.getItem('mauliCurrentTable');
-      const savedWaiter = localStorage.getItem('mauliCurrentWaiter');
+      const savedTableBills = localStorage.getItem('mauliTableBills');
+      const savedTableWaiters = localStorage.getItem('mauliTableWaiters');
+      const savedTable = localStorage.getItem('mauliCurrentTable') || 'T-1';
       const savedBillNo = localStorage.getItem('mauliCurrentBillNo');
 
-      if (savedBill) {
-        bill = JSON.parse(savedBill);
+      if (savedTableBills) {
+        tableBills = JSON.parse(savedTableBills);
+      } else {
+        TABLES.forEach(t => tableBills[t] = []);
+        // Migration: check if there is an old single-table bill structure
+        const savedBill = localStorage.getItem('mauliCurrentBill');
+        if (savedBill) {
+          tableBills[savedTable] = JSON.parse(savedBill);
+        }
       }
-      if (savedTable) {
-        document.getElementById('tableNo').value = savedTable;
+
+      if (savedTableWaiters) {
+        tableWaiters = JSON.parse(savedTableWaiters);
+      } else {
+        TABLES.forEach(t => tableWaiters[t] = '');
+        const savedWaiter = localStorage.getItem('mauliCurrentWaiter');
+        if (savedWaiter) {
+          tableWaiters[savedTable] = savedWaiter;
+        }
       }
-      if (savedWaiter) {
-        document.getElementById('waiterName').value = savedWaiter;
-      }
+
+      currentTable = savedTable;
+      bill = tableBills[currentTable] || [];
+
+      // Set UI values
+      document.getElementById('tableNo').value = currentTable;
+      document.getElementById('waiterName').value = tableWaiters[currentTable] || '';
+
       if (savedBillNo) {
         document.getElementById('billNo').value = savedBillNo;
       } else {
         document.getElementById('billNo').value = getBillNoString();
       }
+
+      // Sync mobile label indicator
+      const indicator = document.getElementById('mobileTableIndicator');
+      if (indicator) indicator.textContent = '📍 ' + currentTable;
     }
 
     function getBillNoString() {
@@ -1263,10 +1710,46 @@
 
     // Save state on mutations
     function backupCurrentBill() {
-      localStorage.setItem('mauliCurrentBill', JSON.stringify(bill));
-      localStorage.setItem('mauliCurrentTable', document.getElementById('tableNo').value);
-      localStorage.setItem('mauliCurrentWaiter', document.getElementById('waiterName').value);
+      tableBills[currentTable] = [...bill];
+      localStorage.setItem('mauliTableBills', JSON.stringify(tableBills));
+      localStorage.setItem('mauliTableWaiters', JSON.stringify(tableWaiters));
+      localStorage.setItem('mauliCurrentTable', currentTable);
       localStorage.setItem('mauliCurrentBillNo', document.getElementById('billNo').value);
+    }
+
+    function switchTable(tableId) {
+      if (!TABLES.includes(tableId)) return;
+      
+      // Save current table bill
+      tableBills[currentTable] = [...bill];
+      
+      // Switch active table
+      currentTable = tableId;
+      if (!tableBills[currentTable]) {
+        tableBills[currentTable] = [];
+      }
+      bill = tableBills[currentTable];
+      
+      if (!tableWaiters[currentTable]) {
+        tableWaiters[currentTable] = '';
+      }
+      
+      // Sync inputs
+      document.getElementById('tableNo').value = currentTable;
+      document.getElementById('waiterName').value = tableWaiters[currentTable] || '';
+      
+      const indicator = document.getElementById('mobileTableIndicator');
+      if (indicator) indicator.textContent = '📍 ' + currentTable;
+      
+      // Re-render
+      renderBill();
+      renderTablesDashboard();
+      backupCurrentBill();
+    }
+
+    function updateWaiterName(val) {
+      tableWaiters[currentTable] = val;
+      backupCurrentBill();
     }
 
     function renderFilters() {
@@ -1329,6 +1812,7 @@
       
       renderBill();
       backupCurrentBill();
+      renderTablesDashboard();
       
       document.getElementById('codeInput').value = '';
       document.getElementById('codeInput').focus();
@@ -1348,8 +1832,18 @@
       document.getElementById('billCount').textContent = totalQty;
       document.getElementById('itemCount').textContent = totalQty + ' items';
       
-      const tbl = document.getElementById('tableNo').value;
-      document.getElementById('billInfo').textContent = tbl ? 'Table: ' + tbl : '';
+      document.getElementById('billInfo').textContent = currentTable ? 'Table: ' + currentTable : '';
+
+      // Sync mobile Order tab items count badge
+      const mobileOrderBadge = document.getElementById('mobileOrderBadge');
+      if (mobileOrderBadge) {
+        if (totalQty > 0) {
+          mobileOrderBadge.textContent = totalQty;
+          mobileOrderBadge.style.display = 'flex';
+        } else {
+          mobileOrderBadge.style.display = 'none';
+        }
+      }
 
       if (!bill.length) {
         container.innerHTML = `
@@ -1388,25 +1882,94 @@
       }
       renderBill();
       backupCurrentBill();
+      renderTablesDashboard();
     }
 
     function removeItem(i) {
       bill.splice(i, 1);
       renderBill();
       backupCurrentBill();
+      renderTablesDashboard();
     }
 
     function clearBill() {
       if (bill.length && !confirm('Are you sure you want to clear the current bill details?')) return;
       
       bill = [];
-      renderBill();
-      rollNewBillNo();
-      
-      document.getElementById('tableNo').value = '';
+      tableBills[currentTable] = [];
+      tableWaiters[currentTable] = '';
       document.getElementById('waiterName').value = '';
       
+      renderBill();
+      renderTablesDashboard();
+      rollNewBillNo();
       backupCurrentBill();
+    }
+
+    function renderTablesDashboard() {
+      const tablesBar = document.getElementById('tablesBar');
+      const mobileTablesGrid = document.getElementById('mobileTablesGrid');
+      
+      let barHtml = '';
+      let gridHtml = '';
+      let activeTablesCount = 0;
+      
+      TABLES.forEach(t => {
+        const tBill = tableBills[t] || [];
+        const itemsCount = tBill.reduce((sum, item) => sum + item.qty, 0);
+        const subtotal = tBill.reduce((sum, item) => sum + (item.price * item.qty), 0);
+        const isActive = t === currentTable;
+        const hasItems = itemsCount > 0;
+        
+        if (hasItems) activeTablesCount++;
+        
+        // Desktop horizontal scrollbar
+        barHtml += `
+          <div class="table-tab-card${isActive ? ' active' : ''}${hasItems ? ' has-items' : ''}" onclick="switchTable('${t}')">
+            <span class="table-tab-name">${t}</span>
+            <span class="table-tab-status">${hasItems ? `${itemsCount} items (₹${subtotal})` : 'Empty'}</span>
+          </div>
+        `;
+        
+        // Mobile grid
+        gridHtml += `
+          <div class="mobile-table-card${isActive ? ' active' : ''}${hasItems ? ' has-items' : ''}" onclick="switchTable('${t}'); switchMobileTab('menu');">
+            <span class="mobile-table-name">${t}</span>
+            <span class="mobile-table-status">${hasItems ? `${itemsCount} items<br>₹${subtotal}` : 'Empty'}</span>
+          </div>
+        `;
+      });
+      
+      if (tablesBar) tablesBar.innerHTML = barHtml;
+      if (mobileTablesGrid) mobileTablesGrid.innerHTML = gridHtml;
+      
+      const countText = document.getElementById('activeTablesCountText');
+      if (countText) countText.textContent = `Active: ${activeTablesCount} / 12`;
+      
+      const activeBadge = document.getElementById('mobileActiveTablesBadge');
+      if (activeBadge) {
+        if (activeTablesCount > 0) {
+          activeBadge.textContent = activeTablesCount;
+          activeBadge.style.display = 'flex';
+        } else {
+          activeBadge.style.display = 'none';
+        }
+      }
+    }
+
+    function switchMobileTab(tab) {
+      activeMobileTab = tab;
+      
+      document.body.classList.remove('mobile-tab-tables', 'mobile-tab-menu', 'mobile-tab-order');
+      document.body.classList.add(`mobile-tab-${tab}`);
+      
+      const navItems = document.querySelectorAll('.bottom-nav .nav-item');
+      if (navItems.length >= 3) {
+        navItems.forEach(item => item.classList.remove('active'));
+        if (tab === 'tables') navItems[0].classList.add('active');
+        else if (tab === 'menu') navItems[1].classList.add('active');
+        else if (tab === 'order') navItems[2].classList.add('active');
+      }
     }
 
     // Modal Interaction
@@ -1417,8 +1980,8 @@
       }
 
       const billNo = document.getElementById('billNo').value || 'MD-1000';
-      const tableNo = document.getElementById('tableNo').value || '—';
-      const waiterName = document.getElementById('waiterName').value || '—';
+      const tableNo = currentTable || '—';
+      const waiterName = tableWaiters[currentTable] || '—';
       
       const date = new Date().toLocaleString('en-IN', {
         day: '2-digit',
@@ -1438,7 +2001,7 @@
       const itemsBody = document.getElementById('rItemsBody');
       itemsBody.innerHTML = bill.map(b => `
         <tr>
-          <td style="padding: 5px 0;">${b.name}</td>
+          <td style="padding: 5px 0; text-align:left;">${b.name}</td>
           <td style="text-align: center; padding: 5px 0;">${b.qty}</td>
           <td style="text-align: right; padding: 5px 0;">₹${b.price.toFixed(2)}</td>
           <td style="text-align: right; padding: 5px 0;">₹${(b.price * b.qty).toFixed(2)}</td>
@@ -1448,12 +2011,35 @@
       const grandTotal = bill.reduce((s, b) => s + (b.price * b.qty), 0);
       document.getElementById('rGrandTotal').textContent = '₹' + grandTotal.toFixed(2);
 
+      // Generate dynamic UPI Payment QR Code
+      const upiId = localStorage.getItem('mauliUpiId') || 'pay@maulidhaba';
+      const merchantName = localStorage.getItem('mauliMerchantName') || '॥ माउली ढाबा ॥';
+      
+      const upiUri = `upi://pay?pa=${upiId}&pn=${encodeURIComponent(merchantName)}&am=${grandTotal.toFixed(2)}&tn=${encodeURIComponent('Bill ' + billNo)}&cu=INR`;
+      const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(upiUri)}`;
+      
+      document.getElementById('receiptQrImg').src = qrUrl;
+
       // Open Modal Overlay
       document.getElementById('printModal').classList.add('active');
     }
 
     function closePrintModal() {
       document.getElementById('printModal').classList.remove('active');
+    }
+
+    function finalizeBilling() {
+      rollNewBillNo();
+      bill = [];
+      tableBills[currentTable] = [];
+      tableWaiters[currentTable] = '';
+      
+      document.getElementById('waiterName').value = '';
+      
+      renderBill();
+      renderTablesDashboard();
+      backupCurrentBill();
+      closePrintModal();
     }
 
     // PDF Generation and Direct Download
@@ -1472,14 +2058,7 @@
 
       // Generate and save the PDF instantly
       html2pdf().set(opt).from(element).save().then(() => {
-        // Roll new bill number automatically upon successful billing save
-        rollNewBillNo();
-        bill = [];
-        renderBill();
-        document.getElementById('tableNo').value = '';
-        document.getElementById('waiterName').value = '';
-        backupCurrentBill();
-        closePrintModal();
+        finalizeBilling();
         alert('Invoice PDF generated and saved successfully to your downloads folder!');
       });
     }
@@ -1487,15 +2066,116 @@
     // Standard Direct Printing (Thermal compatibility)
     function triggerSystemPrint() {
       window.print();
+      finalizeBilling();
+    }
+
+    // Settings Configuration Management
+    function loadSettings() {
+      const upi = localStorage.getItem('mauliUpiId') || 'pay@maulidhaba';
+      const name = localStorage.getItem('mauliMerchantName') || '॥ माउली ढाबा ॥';
+      const phone = localStorage.getItem('mauliPhone') || '7261915663 / 8149731389';
       
-      // Post print sequence
-      rollNewBillNo();
-      bill = [];
-      renderBill();
-      document.getElementById('tableNo').value = '';
-      document.getElementById('waiterName').value = '';
-      backupCurrentBill();
-      closePrintModal();
+      document.getElementById('settingUpiId').value = upi;
+      document.getElementById('settingMerchantName').value = name;
+      document.getElementById('settingPhone').value = phone;
+      
+      // Apply dynamically
+      document.querySelectorAll('.receipt-title-setting').forEach(el => el.textContent = name);
+      document.querySelectorAll('.receipt-title').forEach(el => el.textContent = name);
+      
+      const contactEl = document.querySelector('.receipt-sub');
+      if (contactEl) {
+        contactEl.innerHTML = `Near Krishna Bharat Petroleum, Old Mumbai-Pune Highway<br>
+          Khalapur, Dist. Raigad 410202<br>
+          📞 Phone: ${phone}`;
+      }
+    }
+
+    function openSettingsModal() {
+      loadSettings();
+      document.getElementById('settingsModal').classList.add('active');
+    }
+
+    function closeSettingsModal() {
+      document.getElementById('settingsModal').classList.remove('active');
+    }
+
+    function saveSettings() {
+      const upi = document.getElementById('settingUpiId').value.trim();
+      const name = document.getElementById('settingMerchantName').value.trim();
+      const phone = document.getElementById('settingPhone').value.trim();
+      
+      if (!upi) {
+        alert("UPI ID (VPA) is required to receive payments!");
+        return;
+      }
+      
+      localStorage.setItem('mauliUpiId', upi);
+      localStorage.setItem('mauliMerchantName', name || '॥ माउली ढाबा ॥');
+      localStorage.setItem('mauliPhone', phone || '7261915663 / 8149731389');
+      
+      loadSettings();
+      closeSettingsModal();
+      alert("Configuration settings saved successfully!");
+    }
+
+    // Share invoice summary through WhatsApp or native Share Drawer
+    function shareBillReceipt() {
+      if (!bill.length) return;
+      
+      const billNo = document.getElementById('billNo').value || 'MD-1000';
+      const tableNo = currentTable || '—';
+      const waiterName = tableWaiters[currentTable] || '—';
+      const grandTotal = bill.reduce((s, b) => s + (b.price * b.qty), 0);
+      const date = document.getElementById('rDate').textContent;
+      const shopName = localStorage.getItem('mauliMerchantName') || '॥ माउली ढाबा ॥';
+      const phoneNo = localStorage.getItem('mauliPhone') || '7261915663';
+      
+      let text = `🍛 *${shopName}* 🍛\n`;
+      text += `_Khalapur, Raigad · Since 1991_\n`;
+      text += `=========================\n`;
+      text += `🧾 *Bill No:* ${billNo}\n`;
+      text += `📍 *Table No:* ${tableNo}\n`;
+      text += `🤵 *Waiter:* ${waiterName}\n`;
+      text += `📅 *Date:* ${date}\n`;
+      text += `=========================\n`;
+      
+      bill.forEach(b => {
+        text += `• ${b.name}\n  ${b.qty} x ₹${b.price.toFixed(2)} = *₹${(b.price * b.qty).toFixed(2)}*\n`;
+      });
+      
+      text += `=========================\n`;
+      text += `💰 *TOTAL PAYABLE:* *₹${grandTotal.toFixed(2)}*\n`;
+      text += `=========================\n`;
+      
+      const upiId = localStorage.getItem('mauliUpiId') || 'pay@maulidhaba';
+      text += `📲 *Pay Online via UPI:* \n`;
+      text += `UPI ID: ${upiId}\n\n`;
+      text += `🙏 *Thank you for dining with us!* 🙏\n`;
+      text += `Please visit again!\n`;
+      text += `_Contact: ${phoneNo}_`;
+      
+      const phone = prompt("Enter customer mobile number (10-digit) to send bill directly via WhatsApp, or leave blank to open system sharing drawer:");
+      if (phone !== null) {
+        if (phone.trim() !== "") {
+          let cleanPhone = phone.replace(/\D/g, '');
+          if (cleanPhone.length === 10) {
+            cleanPhone = '91' + cleanPhone;
+          }
+          const waUrl = `https://api.whatsapp.com/send?phone=${cleanPhone}&text=${encodeURIComponent(text)}`;
+          window.open(waUrl, '_blank');
+        } else {
+          if (navigator.share) {
+            navigator.share({
+              title: `${shopName} Invoice - ${billNo}`,
+              text: text
+            }).catch(err => console.log("Web Share failed:", err));
+          } else {
+            const waUrl = `https://web.whatsapp.com/send?text=${encodeURIComponent(text)}`;
+            window.open(waUrl, '_blank');
+          }
+        }
+      }
     }
 
     // Input Actions
@@ -1510,6 +2190,13 @@
     renderFilters();
     renderMenu();
     renderBill();
+    renderTablesDashboard();
+    loadSettings();
+
+    // Check device ratio on load to initialize correct mobile view
+    if (window.innerWidth <= 768) {
+      switchMobileTab('tables');
+    }
   </script>
 </body>
 </html>
