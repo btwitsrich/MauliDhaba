@@ -54,6 +54,7 @@
       background-image: var(--bg-gradient);
       color: var(--text-main);
       height: 100vh;
+      height: 100dvh;
       display: flex;
       flex-direction: column;
       overflow: hidden;
@@ -1244,6 +1245,29 @@
     }
 
     @media (max-width: 768px) {
+      /* Make header highly compact on mobile */
+      .header {
+        padding: 8px 12px !important;
+        gap: 8px !important;
+      }
+      .header-left h1 {
+        font-size: 18px !important;
+        letter-spacing: 0.5px !important;
+      }
+      .header-left p {
+        font-size: 8px !important;
+        margin-top: 1px !important;
+      }
+      .settings-btn {
+        width: 28px !important;
+        height: 28px !important;
+        font-size: 13px !important;
+      }
+      .filter-btn {
+        padding: 5px 12px !important;
+        font-size: 10px !important;
+      }
+
       /* Hide desktop headers/controls/tables bar by default */
       .tables-bar {
         display: none !important;
@@ -1326,7 +1350,7 @@
         display: flex;
         justify-content: space-around;
         align-items: center;
-        z-index: 100;
+        z-index: 9999;
         box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.4);
       }
       .nav-item {
@@ -1830,6 +1854,17 @@
           <input type="text" id="settingWhatsApp" placeholder="e.g. 7261915663" style="text-align: left; background: rgba(0,0,0,0.25);">
           <span style="font-size: 9px; color: var(--text-muted); margin-top: 2px; text-transform: none; opacity: 0.8;">If configured, invoice sharing via WhatsApp will default or log to this business number.</span>
         </div>
+        <div class="meta-field" style="align-items: stretch; display: flex; flex-direction: column; gap: 4px; border-top: 1px solid var(--border-light); padding-top: 14px; margin-top: 6px;">
+          <label style="margin-bottom: 2px; color: var(--accent-gold); font-weight: bold;">🔄 Realtime Device Sync Code</label>
+          <div style="display: flex; gap: 8px;">
+            <input type="text" id="settingSyncCode" placeholder="Enter custom sync name..." style="text-align: left; background: rgba(0,0,0,0.25); flex: 1;">
+            <button class="btn-print" onclick="generateRandomSyncCode()" style="flex: none; padding: 0 10px; font-size: 11px; width: auto; height: 32px; border-radius: 8px;">Generate</button>
+          </div>
+          <span style="font-size: 9px; color: var(--text-muted); text-transform: none; opacity: 0.8;">Enter the SAME code on all smartphones/devices to sync them together!</span>
+        </div>
+        <div style="display: flex; gap: 8px; margin-top: 4px;">
+          <button class="btn-clear" onclick="publishFullSync()" style="font-size: 11px; padding: 8px; flex: 1; border-color: var(--accent-gold); color: var(--accent-gold); background: rgba(212,175,55,0.05); height: 34px; border-radius: 8px;">🔄 Sync All Devices Now</button>
+        </div>
       </div>
       <div class="modal-footer">
         <button class="btn-clear" onclick="closeSettingsModal()" style="flex: 1;">Cancel</button>
@@ -2087,6 +2122,16 @@
       localStorage.setItem('mauliTableCustomers', JSON.stringify(tableCustomers));
       localStorage.setItem('mauliCurrentTable', currentTable);
       localStorage.setItem('mauliCurrentBillNo', document.getElementById('billNo').value);
+      
+      // Broadcast update to all other devices in real-time
+      publishSyncState('table_update', {
+        tableNo: currentTable,
+        bill: bill,
+        waiter: tableWaiters[currentTable] || '',
+        status: tableStatuses[currentTable] || 'blank',
+        customer: tableCustomers[currentTable] || { name: '', phone: '' },
+        billCounter: billCounter
+      });
     }
 
     function switchTable(tableId) {
@@ -2691,10 +2736,17 @@
       const phone = localStorage.getItem('mauliPhone') || '7261915663 / 8149731389';
       const whatsapp = localStorage.getItem('mauliWhatsApp') || '8149731389';
       
+      let syncCode = localStorage.getItem('mauliSyncCode');
+      if (!syncCode) {
+        syncCode = 'mauli_dhaba_sync_' + Math.random().toString(36).substring(2, 9);
+        localStorage.setItem('mauliSyncCode', syncCode);
+      }
+      
       document.getElementById('settingUpiId').value = upi;
       document.getElementById('settingMerchantName').value = name;
       document.getElementById('settingPhone').value = phone;
       document.getElementById('settingWhatsApp').value = whatsapp;
+      document.getElementById('settingSyncCode').value = syncCode;
       
       // Apply dynamically
       document.querySelectorAll('.receipt-title-setting').forEach(el => el.textContent = name);
@@ -2722,16 +2774,26 @@
       const name = document.getElementById('settingMerchantName').value.trim();
       const phone = document.getElementById('settingPhone').value.trim();
       const whatsapp = document.getElementById('settingWhatsApp').value.trim();
+      const syncCode = document.getElementById('settingSyncCode').value.trim();
       
       if (!upi) {
         alert("UPI ID (VPA) is required to receive payments!");
         return;
       }
       
+      const oldSyncCode = localStorage.getItem('mauliSyncCode');
+      
       localStorage.setItem('mauliUpiId', upi);
       localStorage.setItem('mauliMerchantName', name || '॥ माउली ढाबा ॥');
       localStorage.setItem('mauliPhone', phone || '7261915663 / 8149731389');
       localStorage.setItem('mauliWhatsApp', whatsapp);
+      
+      if (syncCode) {
+        localStorage.setItem('mauliSyncCode', syncCode);
+        if (syncCode !== oldSyncCode) {
+          initRealtimeSync(); // Reinitialize connection with new channel
+        }
+      }
       
       loadSettings();
       closeSettingsModal();
@@ -3112,6 +3174,139 @@
       }
     }
 
+
+    // === REALTIME SERVERLESS MULTI-DEVICE SYNCHRONIZATION ===
+    let syncSource;
+    const mySenderId = Math.random().toString(36).substring(2, 15);
+
+    function initRealtimeSync() {
+      let code = localStorage.getItem('mauliSyncCode');
+      if (!code) {
+        code = 'mauli_dhaba_sync_' + Math.random().toString(36).substring(2, 9);
+        localStorage.setItem('mauliSyncCode', code);
+      }
+
+      console.log("Connecting to realtime sync channel:", code);
+      
+      if (syncSource) {
+        syncSource.close();
+      }
+
+      try {
+        syncSource = new EventSource(`https://ntfy.sh/${code}/sse`);
+        
+        syncSource.onmessage = function(event) {
+          try {
+            const data = JSON.parse(event.data);
+            if (data.event !== 'message') return;
+
+            const payload = JSON.parse(data.message);
+            if (payload.senderId === mySenderId) return; // Skip loops
+
+            handleIncomingSync(payload);
+          } catch (err) {
+            // Silence parsing errors from generic keepalives
+          }
+        };
+
+        syncSource.onerror = function() {
+          console.warn("Realtime sync stream disconnected. Retrying in 10s...");
+          setTimeout(initRealtimeSync, 10000);
+        };
+      } catch (e) {
+        console.error("Failed to initialize Server-Sent Events sync:", e);
+      }
+    }
+
+    function publishSyncState(action, dataPayload) {
+      const code = localStorage.getItem('mauliSyncCode');
+      if (!code) return;
+
+      const message = {
+        senderId: mySenderId,
+        action: action,
+        payload: dataPayload,
+        timestamp: Date.now()
+      };
+
+      fetch(`https://ntfy.sh/${code}`, {
+        method: 'POST',
+        body: JSON.stringify(message),
+        headers: {
+          'Title': 'POS Update',
+          'Tags': 'pos,sync'
+        }
+      }).catch(err => console.error("Sync transmission failed:", err));
+    }
+
+    function handleIncomingSync(message) {
+      const action = message.action;
+      const payload = message.payload;
+
+      console.log(`Sync update received: [${action}]`);
+
+      if (action === 'table_update') {
+        tableBills[payload.tableNo] = payload.bill;
+        tableWaiters[payload.tableNo] = payload.waiter;
+        tableStatuses[payload.tableNo] = payload.status;
+        tableCustomers[payload.tableNo] = payload.customer;
+        billCounter = Math.max(billCounter, payload.billCounter);
+
+        localStorage.setItem('mauliTableBills', JSON.stringify(tableBills));
+        localStorage.setItem('mauliTableWaiters', JSON.stringify(tableWaiters));
+        localStorage.setItem('mauliTableStatuses', JSON.stringify(tableStatuses));
+        localStorage.setItem('mauliTableCustomers', JSON.stringify(tableCustomers));
+        localStorage.setItem('mauliBillNo', billCounter);
+
+        if (payload.tableNo === currentTable) {
+          bill = tableBills[currentTable] || [];
+          document.getElementById('waiterName').value = tableWaiters[currentTable] || '';
+          document.getElementById('custName').value = tableCustomers[currentTable]?.name || '';
+          document.getElementById('custPhone').value = tableCustomers[currentTable]?.phone || '';
+          renderBill();
+        }
+        renderTablesDashboard();
+      } 
+      else if (action === 'full_sync') {
+        tableBills = payload.tableBills;
+        tableWaiters = payload.tableWaiters;
+        tableStatuses = payload.tableStatuses;
+        tableCustomers = payload.tableCustomers;
+        billCounter = Math.max(billCounter, payload.billCounter);
+
+        localStorage.setItem('mauliTableBills', JSON.stringify(tableBills));
+        localStorage.setItem('mauliTableWaiters', JSON.stringify(tableWaiters));
+        localStorage.setItem('mauliTableStatuses', JSON.stringify(tableStatuses));
+        localStorage.setItem('mauliTableCustomers', JSON.stringify(tableCustomers));
+        localStorage.setItem('mauliBillNo', billCounter);
+
+        bill = tableBills[currentTable] || [];
+        document.getElementById('waiterName').value = tableWaiters[currentTable] || '';
+        document.getElementById('custName').value = tableCustomers[currentTable]?.name || '';
+        document.getElementById('custPhone').value = tableCustomers[currentTable]?.phone || '';
+
+        renderBill();
+        renderTablesDashboard();
+        alert("🔄 Your device state was synchronized and updated in real-time with other devices!");
+      }
+    }
+
+    function generateRandomSyncCode() {
+      const code = 'mauli_dhaba_sync_' + Math.random().toString(36).substring(2, 9);
+      document.getElementById('settingSyncCode').value = code;
+    }
+
+    function publishFullSync() {
+      publishSyncState('full_sync', {
+        tableBills: tableBills,
+        tableWaiters: tableWaiters,
+        tableStatuses: tableStatuses,
+        tableCustomers: tableCustomers,
+        billCounter: billCounter
+      });
+      alert("🔄 POS state broadcasted to other linked devices successfully!");
+    }
+
     // Input Actions
     document.getElementById('codeInput').addEventListener('keydown', e => {
       if (e.key === 'Enter') addByCode();
@@ -3122,6 +3317,7 @@
     // Initial sequence
     loadSavedBill();
     initDatabase();
+    initRealtimeSync();
     renderFilters();
     renderMenu();
     renderBill();
