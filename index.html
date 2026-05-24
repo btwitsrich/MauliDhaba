@@ -1568,9 +1568,15 @@
     <div id="dashboardView" class="dashboard-view">
       <!-- Dashboard Top Header Bar -->
       <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; border-bottom: 1px solid var(--border-light); padding-bottom: 14px;">
-        <h2 style="font-family: 'Cinzel', serif; font-size: 22px; color: var(--accent-gold); text-shadow: 0 2px 4px rgba(0,0,0,0.5); font-weight:900; margin: 0;">🍽️ Tables Layout</h2>
+        <div style="display: flex; align-items: center; gap: 16px;">
+          <h2 style="font-family: 'Cinzel', serif; font-size: 22px; color: var(--accent-gold); text-shadow: 0 2px 4px rgba(0,0,0,0.5); font-weight: 900; margin: 0;">🍽️ Dashboard</h2>
+          <div style="display: flex; gap: 6px; background: rgba(0,0,0,0.25); padding: 3px; border-radius: 8px; border: 1px solid var(--border-light);">
+            <button id="btnViewTables" class="filter-btn active" style="padding: 4px 12px; border-radius: 6px; font-size: 11px;" onclick="setDashboardTab('tables')">Active Layout</button>
+            <button id="btnViewHistory" class="filter-btn" style="padding: 4px 12px; border-radius: 6px; font-size: 11px;" onclick="setDashboardTab('history')">Settled History</button>
+          </div>
+        </div>
         <!-- Legend Bar matching sample -->
-        <div style="display: flex; align-items: center; gap: 14px; flex-wrap: wrap; font-size: 11px; font-weight: 700; color: var(--text-muted);">
+        <div id="dashboardLegend" style="display: flex; align-items: center; gap: 14px; flex-wrap: wrap; font-size: 11px; font-weight: 700; color: var(--text-muted);">
           <span style="display: flex; align-items: center; gap: 6px;"><span style="width: 10px; height: 10px; border-radius: 2px; background: #2f2527; border: 1px solid var(--border-light);"></span> Empty</span>
           <span style="display: flex; align-items: center; gap: 6px;"><span style="width: 10px; height: 10px; border-radius: 2px; background: rgba(52, 152, 219, 0.25); border: 1px solid #3498db; box-shadow: 0 0 6px rgba(52, 152, 219, 0.4);"></span> Running</span>
           <span style="display: flex; align-items: center; gap: 6px;"><span style="width: 10px; height: 10px; border-radius: 2px; background: rgba(241, 196, 15, 0.25); border: 1px solid #f1c40f; box-shadow: 0 0 6px rgba(241, 196, 15, 0.4);"></span> KOT Active</span>
@@ -1578,22 +1584,56 @@
         </div>
       </div>
       
-      <!-- Table Category: AC Diner Sections -->
-      <div class="dashboard-section">
-        <div class="cat-label" style="margin-bottom: 4px; font-size: 11px; font-weight: 800;">❄️ A/C Dining Hall</div>
-        <div class="dashboard-grid" id="gridAc"></div>
+      <!-- Active Tables Container -->
+      <div id="activeTablesContainer">
+        <!-- Table Category: AC Diner Sections -->
+        <div class="dashboard-section">
+          <div class="cat-label" style="margin-bottom: 4px; font-size: 11px; font-weight: 800;">❄️ A/C Dining Hall</div>
+          <div class="dashboard-grid" id="gridAc"></div>
+        </div>
+        
+        <!-- Table Category: Non-AC Diner Sections -->
+        <div class="dashboard-section">
+          <div class="cat-label" style="margin-bottom: 4px; font-size: 11px; font-weight: 800;">🍃 Non-A/C Open Area</div>
+          <div class="dashboard-grid" id="gridNonAc"></div>
+        </div>
+        
+        <!-- Table Category: Special Takeaway/Online Sections -->
+        <div class="dashboard-section" style="margin-bottom: 24px;">
+          <div class="cat-label" style="margin-bottom: 4px; font-size: 11px; font-weight: 800;">📦 Quick Service Orders</div>
+          <div class="dashboard-grid" id="gridQuick"></div>
+        </div>
       </div>
-      
-      <!-- Table Category: Non-AC Diner Sections -->
-      <div class="dashboard-section">
-        <div class="cat-label" style="margin-bottom: 4px; font-size: 11px; font-weight: 800;">🍃 Non-A/C Open Area</div>
-        <div class="dashboard-grid" id="gridNonAc"></div>
-      </div>
-      
-      <!-- Table Category: Special Takeaway/Online Sections -->
-      <div class="dashboard-section" style="margin-bottom: 24px;">
-        <div class="cat-label" style="margin-bottom: 4px; font-size: 11px; font-weight: 800;">📦 Quick Service Orders</div>
-        <div class="dashboard-grid" id="gridQuick"></div>
+
+      <!-- Database History Container -->
+      <div id="historyContainer" style="display: none; flex-direction: column; gap: 16px; margin-bottom: 24px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-top: 8px;">
+          <div class="search-wrap" style="width: 320px;">
+            <span class="search-icon"></span>
+            <input type="text" id="historySearchBox" placeholder="Search bill, table, customer or phone..." oninput="filterHistory()">
+          </div>
+          <button class="btn-clear" onclick="clearAllHistory()" style="flex: none; padding: 8px 16px; font-size: 11px; height: 36px; border-radius: 10px;">⚠️ Clear History</button>
+        </div>
+        
+        <div style="overflow-x: auto; background: var(--panel-bg); border: 1px solid var(--border-light); border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.5);">
+          <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 12px; color: var(--text-main);">
+            <thead>
+              <tr style="border-bottom: 1px solid var(--border-light); background: rgba(0,0,0,0.3); font-family: 'Plus Jakarta Sans', sans-serif; color: var(--accent-gold); font-weight: 800; font-size: 10px; letter-spacing: 0.5px; text-transform: uppercase;">
+                <th style="padding: 12px 16px; width: 12%;">Bill No</th>
+                <th style="padding: 12px 16px; width: 10%;">Table</th>
+                <th style="padding: 12px 16px; width: 15%;">Waiter</th>
+                <th style="padding: 12px 16px; width: 25%;">Customer Details</th>
+                <th style="padding: 12px 16px; text-align: center; width: 10%;">Method</th>
+                <th style="padding: 12px 16px; text-align: right; width: 12%;">Amount Paid</th>
+                <th style="padding: 12px 16px; text-align: center; width: 15%;">Time Settled</th>
+                <th style="padding: 12px 16px; text-align: center; width: 11%;">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="historyTableBody">
+              <!-- Dynamically populated from IndexedDB -->
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
 
@@ -2557,39 +2597,43 @@
       }
 
       const grandTotal = bill.reduce((s, b) => s + (b.price * b.qty), 0);
+      const billNo = document.getElementById('billNo').value || 'MD-1000';
+      const tableNo = currentTable || '—';
+      const waiterName = tableWaiters[currentTable] || '—';
+      const date = new Date().toLocaleString('en-IN', {
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: true
+      });
+      const customerName = tableCustomers[currentTable]?.name || '';
+      const customerPhone = tableCustomers[currentTable]?.phone || '';
       
-      // Auto-share WhatsApp receipt compiling logic
-      let phone = (tableCustomers[currentTable]?.phone || '').trim();
-      const bizNumber = localStorage.getItem('mauliWhatsApp') || '8149731389';
-      let targetNum = phone;
-      let shouldShare = true;
+      // Save settled bill record to IndexedDB database
+      const billRecord = {
+        billNo: billNo,
+        tableNo: tableNo,
+        waiterName: waiterName,
+        customerName: customerName,
+        customerPhone: customerPhone,
+        items: [...bill],
+        subtotal: bill.reduce((s, b) => s + (b.price * b.qty), 0),
+        grandTotal: grandTotal,
+        paymentMethod: method,
+        settledAt: new Date().getTime()
+      };
+      saveSettledBillToDB(billRecord);
 
-      if (!targetNum) {
-        const entered = prompt("Enter customer mobile number (10-digit) to auto-send receipt via WhatsApp (or leave blank to send to official business number):", bizNumber);
-        if (entered !== null) {
-          targetNum = entered.trim() || bizNumber;
-        } else {
-          shouldShare = false; // User cancelled
-        }
-      }
-
-      if (shouldShare && targetNum) {
-        let cleanPhone = targetNum.replace(/\D/g, '');
+      // Auto-share WhatsApp receipt compiling logic (frictionless: skip entirely if customer phone is empty)
+      let phone = customerPhone.trim();
+      if (phone) {
+        let cleanPhone = phone.replace(/\D/g, '');
         if (cleanPhone.length === 10) {
           cleanPhone = '91' + cleanPhone;
         }
 
-        const billNo = document.getElementById('billNo').value || 'MD-1000';
-        const tableNo = currentTable || '—';
-        const waiterName = tableWaiters[currentTable] || '—';
-        const date = new Date().toLocaleString('en-IN', {
-          day: '2-digit',
-          month: 'short',
-          year: 'numeric',
-          hour: '2-digit',
-          minute: '2-digit',
-          hour12: true
-        });
         const shopName = localStorage.getItem('mauliMerchantName') || 'MAULI DHABA';
         const phoneNo = localStorage.getItem('mauliPhone') || '7261915663 / 8149731389';
         
@@ -2607,15 +2651,12 @@
         });
         
         text += `=========================\n`;
-        text += `💰 *TOTAL PAYABLE:* *₹${grandTotal.toFixed(2)}*\n`;
+        text += `✅ *STATUS:* PAID & SETTLED\n`;
+        text += `💳 *PAYMENT METHOD:* ${method}\n`;
+        text += `💰 *TOTAL PAID:* *₹${grandTotal.toFixed(2)}*\n`;
         text += `=========================\n`;
-        
-        const upiId = localStorage.getItem('mauliUpiId') || 'Q656762112@ybl';
-        text += `📲 *Pay Online via UPI:* \n`;
-        text += `UPI ID: ${upiId}\n\n`;
         text += `🙏 *Thank you for dining with us!* 🙏\n`;
-        text += `Please visit again!\n`;
-        text += `_Contact: ${phoneNo}_`;
+        text += `Your payment was successfully received. We hope you enjoyed your meal and look forward to serving you again!`;
 
         const waUrl = `https://api.whatsapp.com/send?phone=${cleanPhone}&text=${encodeURIComponent(text)}`;
         window.open(waUrl, '_blank');
@@ -2798,6 +2839,279 @@
       }
     }
 
+    // === INDEXEDDB DATABASE INTEGRATION ===
+    const dbName = "MauliDhabaDB";
+    const dbVersion = 1;
+    let db;
+    let historyRecords = []; // Global cache for search filtering
+
+    function initDatabase() {
+      const request = indexedDB.open(dbName, dbVersion);
+      
+      request.onupgradeneeded = function(e) {
+        const database = e.target.result;
+        if (!database.objectStoreNames.contains("settledBills")) {
+          const store = database.createObjectStore("settledBills", { keyPath: "billNo" });
+          store.createIndex("settledAt", "settledAt", { unique: false });
+        }
+      };
+      
+      request.onsuccess = function(e) {
+        db = e.target.result;
+        console.log("IndexedDB (MauliDhabaDB) initialized successfully.");
+        loadHistoryFromDB();
+      };
+      
+      request.onerror = function(e) {
+        console.error("IndexedDB initialization error:", e);
+      };
+    }
+
+    function saveSettledBillToDB(billRecord) {
+      if (!db) {
+        console.warn("Database not ready. Cannot save bill.");
+        return;
+      }
+      
+      const tx = db.transaction("settledBills", "readwrite");
+      const store = tx.objectStore("settledBills");
+      store.put(billRecord);
+      
+      tx.oncomplete = function() {
+        console.log(`Bill ${billRecord.billNo} successfully saved to database.`);
+        loadHistoryFromDB(); // Automatically refresh history log
+      };
+      
+      tx.onerror = function(e) {
+        console.error("Failed to save bill to database:", e);
+      };
+    }
+
+    function loadHistoryFromDB() {
+      if (!db) return;
+      
+      const tx = db.transaction("settledBills", "readonly");
+      const store = tx.objectStore("settledBills");
+      const index = store.index("settledAt");
+      const request = index.openCursor(null, "prev"); // Newest bills first
+      
+      const tempRecords = [];
+      request.onsuccess = function(e) {
+        const cursor = e.target.result;
+        if (cursor) {
+          tempRecords.push(cursor.value);
+          cursor.continue();
+        } else {
+          historyRecords = tempRecords;
+          renderHistoryTable(historyRecords);
+        }
+      };
+      
+      request.onerror = function(e) {
+        console.error("Failed to query settled bills from database:", e);
+      };
+    }
+
+    function renderHistoryTable(records) {
+      const tbody = document.getElementById("historyTableBody");
+      if (!tbody) return;
+      
+      if (!records.length) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="8" style="padding: 40px; text-align: center; color: var(--text-muted); opacity: 0.6; font-size: 13px;">
+              No settled bills found in database. Settle active tables to populate this history log.
+            </td>
+          </tr>
+        `;
+        return;
+      }
+      
+      tbody.innerHTML = records.map(r => {
+        const dateStr = new Date(r.settledAt).toLocaleTimeString('en-IN', {
+          hour: '2-digit',
+          minute: '2-digit',
+          hour12: true
+        }) + " · " + new Date(r.settledAt).toLocaleDateString('en-IN', {
+          day: '2-digit',
+          month: 'short',
+          year: 'numeric'
+        });
+
+        const custInfo = (r.customerName || r.customerPhone) 
+          ? `<strong>${r.customerName || 'Walk-in'}</strong>${r.customerPhone ? `<br><span style="opacity:0.7; font-size:11px;">📞 ${r.customerPhone}</span>` : ''}`
+          : '<span style="opacity:0.5; font-style:italic;">No Details</span>';
+
+        return `
+          <tr style="border-bottom: 1px solid rgba(212, 175, 55, 0.06); transition: background 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.02)'" onmouseout="this.style.background='none'">
+            <td style="padding: 14px 16px; font-weight: 700; color: var(--accent-gold);">${r.billNo}</td>
+            <td style="padding: 14px 16px; font-weight: bold;">${r.tableNo}</td>
+            <td style="padding: 14px 16px;">${r.waiterName || '—'}</td>
+            <td style="padding: 14px 16px; line-height: 1.3;">${custInfo}</td>
+            <td style="padding: 14px 16px; text-align: center;">
+              <span style="padding: 3px 8px; border-radius: 6px; font-size: 10px; font-weight: 800; border: 1px solid; 
+                ${r.paymentMethod === 'Cash' ? 'border-color: #ffcc00; color: #ffcc00; background: rgba(255,204,0,0.06);' : 
+                  r.paymentMethod === 'UPI' ? 'border-color: #3498db; color: #3498db; background: rgba(52,152,219,0.06);' : 
+                  'border-color: #2ecc71; color: #2ecc71; background: rgba(46,204,113,0.06);'}">
+                ${r.paymentMethod.toUpperCase()}
+              </span>
+            </td>
+            <td style="padding: 14px 16px; text-align: right; font-weight: 800; color: var(--text-main);">₹${parseFloat(r.grandTotal).toFixed(2)}</td>
+            <td style="padding: 14px 16px; text-align: center; color: var(--text-muted); font-size: 11px;">${dateStr}</td>
+            <td style="padding: 14px 16px; text-align: center;">
+              <button class="btn-action-print" style="padding: 6px 12px; font-size: 11px; height: auto; display: inline-flex;" onclick="reopenPastBillReceipt('${r.billNo}')">
+                🧾 Reprints
+              </button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function filterHistory() {
+      const query = document.getElementById("historySearchBox").value.toLowerCase().trim();
+      if (!query) {
+        renderHistoryTable(historyRecords);
+        return;
+      }
+      
+      const filtered = historyRecords.filter(r => {
+        return r.billNo.toLowerCase().includes(query) ||
+               r.tableNo.toLowerCase().includes(query) ||
+               (r.waiterName || "").toLowerCase().includes(query) ||
+               (r.customerName || "").toLowerCase().includes(query) ||
+               (r.customerPhone || "").toLowerCase().includes(query) ||
+               r.paymentMethod.toLowerCase().includes(query);
+      });
+      
+      renderHistoryTable(filtered);
+    }
+
+    function clearAllHistory() {
+      if (!confirm("⚠️ CAUTION: Are you sure you want to permanently delete all settled bills history records? This database action cannot be undone.")) return;
+      
+      const tx = db.transaction("settledBills", "readwrite");
+      const store = tx.objectStore("settledBills");
+      const request = store.clear();
+      
+      request.onsuccess = function() {
+        alert("Database history cleared successfully!");
+        loadHistoryFromDB();
+      };
+    }
+
+    function reopenPastBillReceipt(billNo) {
+      if (!db) return;
+      
+      const tx = db.transaction("settledBills", "readonly");
+      const store = tx.objectStore("settledBills");
+      const request = store.get(billNo);
+      
+      request.onsuccess = function(e) {
+        const record = e.target.result;
+        if (!record) return;
+        
+        // Re-construct the invoice display
+        document.getElementById('rBillNo').textContent = record.billNo;
+        document.getElementById('rTableNo').textContent = record.tableNo;
+        document.getElementById('rWaiterName').textContent = record.waiterName || '—';
+        
+        const dateStr = new Date(record.settledAt).toLocaleString('en-IN', {
+          day: '2-digit',
+          month: 'short',
+          year: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit',
+          hour12: true
+        });
+        document.getElementById('rDate').textContent = dateStr;
+
+        const itemsBody = document.getElementById('rItemsBody');
+        itemsBody.innerHTML = record.items.map(b => `
+          <tr>
+            <td style="padding: 5px 0; text-align:left;">${b.name}</td>
+            <td style="text-align: center; padding: 5px 0;">${b.qty}</td>
+            <td style="text-align: right; padding: 5px 0;">₹${parseFloat(b.price).toFixed(2)}</td>
+            <td style="text-align: right; padding: 5px 0;">₹${(b.price * b.qty).toFixed(2)}</td>
+          </tr>
+        `).join('');
+
+        document.getElementById('rGrandTotal').textContent = '₹' + parseFloat(record.grandTotal).toFixed(2);
+
+        // Dynamic UPI Scan QR generator (re-created matching records VPA details)
+        const upiId = localStorage.getItem('mauliUpiId') || 'Q656762112@ybl';
+        const merchantName = localStorage.getItem('mauliMerchantName') || 'MAULI DHABA';
+        const upiUri = `upi://pay?pa=${upiId}&pn=${encodeURIComponent(merchantName)}&am=${parseFloat(record.grandTotal).toFixed(2)}&tn=${encodeURIComponent('Bill ' + record.billNo)}&cu=INR`;
+        const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(upiUri)}`;
+        document.getElementById('receiptQrImg').src = qrUrl;
+
+        // Open modal view for reprint/sharing
+        const originalFinalize = window.finalizeBilling;
+        window.finalizeBilling = function() {
+          document.getElementById('printModal').classList.remove('active');
+          window.finalizeBilling = originalFinalize;
+        };
+
+        const originalTriggerPrint = window.triggerSystemPrint;
+        window.triggerSystemPrint = function() {
+          window.print();
+          document.getElementById('printModal').classList.remove('active');
+          window.finalizeBilling = originalFinalize;
+          window.triggerSystemPrint = originalTriggerPrint;
+        };
+
+        const originalDownloadPDF = window.downloadPDFReceipt;
+        window.downloadPDFReceipt = function() {
+          const element = document.getElementById('printAreaRoot');
+          const opt = {
+            margin:       [10, 10, 10, 10],
+            filename:     `Mauli_Dhaba_Bill_${record.billNo}.pdf`,
+            image:        { type: 'jpeg', quality: 0.98 },
+            html2canvas:  { scale: 3, useCORS: true, letterRendering: true },
+            jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+          };
+          html2pdf().set(opt).from(element).save().then(() => {
+            document.getElementById('printModal').classList.remove('active');
+            window.finalizeBilling = originalFinalize;
+            window.downloadPDFReceipt = originalDownloadPDF;
+            window.triggerSystemPrint = originalTriggerPrint;
+            alert('Past invoice PDF generated and downloaded!');
+          });
+        };
+
+        // Open Modal Overlay
+        document.getElementById('printModal').classList.add('active');
+      };
+    }
+
+    function setDashboardTab(tabName) {
+      const activeTables = document.getElementById("activeTablesContainer");
+      const history = document.getElementById("historyContainer");
+      const legend = document.getElementById("dashboardLegend");
+      
+      const btnTables = document.getElementById("btnViewTables");
+      const btnHistory = document.getElementById("btnViewHistory");
+      
+      if (tabName === "tables") {
+        activeTables.style.display = "block";
+        history.style.display = "none";
+        legend.style.display = "flex";
+        
+        btnTables.classList.add("active");
+        btnHistory.classList.remove("active");
+      } else {
+        activeTables.style.display = "none";
+        history.style.display = "flex";
+        legend.style.display = "none";
+        
+        btnTables.classList.remove("active");
+        btnHistory.classList.add("active");
+        
+        // Refresh past settlements
+        loadHistoryFromDB();
+      }
+    }
+
     // Input Actions
     document.getElementById('codeInput').addEventListener('keydown', e => {
       if (e.key === 'Enter') addByCode();
@@ -2807,6 +3121,7 @@
 
     // Initial sequence
     loadSavedBill();
+    initDatabase();
     renderFilters();
     renderMenu();
     renderBill();
