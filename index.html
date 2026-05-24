@@ -1028,12 +1028,198 @@
       transform: rotate(45deg);
     }
 
-    /* Mobile Responsive bottom navigation bar */
-    .bottom-nav {
+    /* Dashboard View Layout & Status Cards */
+    .dashboard-view {
       display: none;
     }
 
-    .mobile-tables-view {
+    body.view-dashboard #dashboardView {
+      display: flex !important;
+      flex-direction: column;
+      width: 100%;
+      padding: 24px;
+      gap: 24px;
+      height: 100%;
+      overflow-y: auto;
+      animation: fadeIn 0.3s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    body.view-dashboard .left-panel, 
+    body.view-dashboard .right-panel,
+    body.view-dashboard .tables-bar {
+      display: none !important;
+    }
+    
+    body.view-billing #dashboardView {
+      display: none !important;
+    }
+    body.view-billing .left-panel {
+      display: flex !important;
+    }
+    body.view-billing .right-panel {
+      display: flex !important;
+    }
+    body.view-billing .tables-bar {
+      display: flex !important;
+    }
+
+    .dashboard-section {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+      gap: 16px;
+    }
+
+    .dashboard-card {
+      background: rgba(38, 22, 24, 0.4);
+      border: 1px solid var(--border-light);
+      border-radius: 14px;
+      padding: 20px 14px;
+      text-align: center;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      position: relative;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .dashboard-card:hover {
+      transform: translateY(-3px);
+      border-color: var(--accent-gold);
+      box-shadow: 0 4px 15px rgba(212, 175, 55, 0.15);
+      background: rgba(56, 32, 35, 0.5);
+    }
+
+    .dashboard-card:active {
+      transform: scale(0.96);
+    }
+
+    .dashboard-card.status-blank {
+      border-color: var(--border-light);
+    }
+    .dashboard-card.status-blank .card-table-name {
+      color: var(--text-main);
+    }
+    .dashboard-card.status-blank .card-table-status {
+      color: var(--text-muted);
+      opacity: 0.65;
+    }
+
+    .dashboard-card.status-running {
+      background: rgba(52, 152, 219, 0.12);
+      border-color: #3498db;
+      box-shadow: 0 0 10px rgba(52, 152, 219, 0.15);
+    }
+    .dashboard-card.status-running .card-table-name {
+      color: #3498db;
+      font-weight: 800;
+    }
+    .dashboard-card.status-running .card-table-status {
+      color: var(--text-main);
+      font-weight: 600;
+    }
+
+    .dashboard-card.status-kot {
+      background: rgba(241, 196, 15, 0.12);
+      border-color: #f1c40f;
+      box-shadow: 0 0 10px rgba(241, 196, 15, 0.15);
+    }
+    .dashboard-card.status-kot .card-table-name {
+      color: #f1c40f;
+      font-weight: 800;
+    }
+    .dashboard-card.status-kot .card-table-status {
+      color: var(--text-main);
+      font-weight: 600;
+    }
+
+    .dashboard-card.status-printed {
+      background: rgba(46, 204, 113, 0.12);
+      border-color: #2ecc71;
+      box-shadow: 0 0 10px rgba(46, 204, 113, 0.15);
+    }
+    .dashboard-card.status-printed .card-table-name {
+      color: #2ecc71;
+      font-weight: 800;
+    }
+    .dashboard-card.status-printed .card-table-status {
+      color: var(--text-main);
+      font-weight: 600;
+    }
+
+    .card-table-name {
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+    .card-table-status {
+      font-size: 10px;
+    }
+    .status-icon {
+      position: absolute;
+      top: 8px;
+      right: 10px;
+      font-size: 11px;
+    }
+
+    /* KOT & Checkout Float Bar Styling */
+    .btn-kot {
+      flex: 1;
+      padding: 10px;
+      border-radius: 10px;
+      border: 1px solid #ffcc00;
+      color: #fff;
+      background: rgba(255, 204, 0, 0.08);
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s;
+      box-shadow: 0 2px 8px rgba(255, 204, 0, 0.15);
+    }
+    .btn-kot:hover {
+      background: #ffcc00;
+      color: var(--text-dark);
+      box-shadow: 0 4px 12px rgba(255, 204, 0, 0.3);
+    }
+
+    .mobile-checkout-bar {
+      display: none;
+      position: fixed;
+      bottom: 72px;
+      left: 16px;
+      right: 16px;
+      background: rgba(38, 22, 24, 0.95);
+      border: 1px solid var(--accent-gold);
+      border-radius: 12px;
+      padding: 10px 16px;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6), 0 0 15px var(--accent-gold-glow);
+      z-index: 99;
+      cursor: pointer;
+      animation: fadeInUp 0.3s ease-out;
+    }
+    
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Mobile Responsive bottom navigation bar */
+    .bottom-nav {
       display: none;
     }
 
@@ -1069,14 +1255,14 @@
       }
       
       /* Panels show/hide logic based on mobile body classes */
-      .left-panel, .right-panel, .mobile-tables-view {
+      .left-panel, .right-panel, .dashboard-view {
         width: 100% !important;
         display: none !important;
         border: none !important;
         box-shadow: none !important;
       }
       
-      body.mobile-tab-tables .mobile-tables-view {
+      body.mobile-tab-tables .dashboard-view {
         display: flex !important;
         flex-direction: column;
         padding: 16px;
@@ -1326,6 +1512,9 @@
         </div>
       </div>
       
+      <!-- Home (tables dashboard) button -->
+      <button class="settings-btn" onclick="goToDashboard()" title="Tables Dashboard" style="color: var(--accent-gold); margin-right: 4px;">🏠</button>
+      
       <!-- Settings gear icon -->
       <button class="settings-btn" onclick="openSettingsModal()" title="Settings">⚙️</button>
     </div>
@@ -1345,13 +1534,37 @@
 
   <!-- Main POS Interface split in two panes -->
   <div class="main">
-    <!-- Mobile Tables Dashboard (shown in tables tab on mobile) -->
-    <div class="mobile-tables-view" id="mobileTablesView">
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-        <h2 style="font-family: 'Cinzel', serif; font-size: 18px; color: var(--accent-gold); margin: 0;">Restaurant Tables</h2>
-        <span style="font-size: 11px; font-weight: 700; background: rgba(212,175,55,0.1); color: var(--accent-gold); border: 1px solid var(--border-light); padding: 4px 10px; border-radius: 8px;" id="activeTablesCountText">Active: 0 / 12</span>
+    <!-- Beautiful Dashboard Home Page (Table View Screen) -->
+    <div id="dashboardView" class="dashboard-view">
+      <!-- Dashboard Top Header Bar -->
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; border-bottom: 1px solid var(--border-light); padding-bottom: 14px;">
+        <h2 style="font-family: 'Cinzel', serif; font-size: 22px; color: var(--accent-gold); text-shadow: 0 2px 4px rgba(0,0,0,0.5); font-weight:900; margin: 0;">🍽️ Tables Layout</h2>
+        <!-- Legend Bar matching sample -->
+        <div style="display: flex; align-items: center; gap: 14px; flex-wrap: wrap; font-size: 11px; font-weight: 700; color: var(--text-muted);">
+          <span style="display: flex; align-items: center; gap: 6px;"><span style="width: 10px; height: 10px; border-radius: 2px; background: #2f2527; border: 1px solid var(--border-light);"></span> Empty</span>
+          <span style="display: flex; align-items: center; gap: 6px;"><span style="width: 10px; height: 10px; border-radius: 2px; background: rgba(52, 152, 219, 0.25); border: 1px solid #3498db; box-shadow: 0 0 6px rgba(52, 152, 219, 0.4);"></span> Running</span>
+          <span style="display: flex; align-items: center; gap: 6px;"><span style="width: 10px; height: 10px; border-radius: 2px; background: rgba(241, 196, 15, 0.25); border: 1px solid #f1c40f; box-shadow: 0 0 6px rgba(241, 196, 15, 0.4);"></span> KOT Active</span>
+          <span style="display: flex; align-items: center; gap: 6px;"><span style="width: 10px; height: 10px; border-radius: 2px; background: rgba(46, 204, 113, 0.25); border: 1px solid #2ecc71; box-shadow: 0 0 6px rgba(46, 204, 113, 0.4);"></span> Bill Printed</span>
+        </div>
       </div>
-      <div class="mobile-tables-grid" id="mobileTablesGrid"></div>
+      
+      <!-- Table Category: AC Diner Sections -->
+      <div class="dashboard-section">
+        <div class="cat-label" style="margin-bottom: 4px; font-size: 11px; font-weight: 800;">❄️ A/C Dining Hall</div>
+        <div class="dashboard-grid" id="gridAc"></div>
+      </div>
+      
+      <!-- Table Category: Non-AC Diner Sections -->
+      <div class="dashboard-section">
+        <div class="cat-label" style="margin-bottom: 4px; font-size: 11px; font-weight: 800;">🍃 Non-A/C Open Area</div>
+        <div class="dashboard-grid" id="gridNonAc"></div>
+      </div>
+      
+      <!-- Table Category: Special Takeaway/Online Sections -->
+      <div class="dashboard-section" style="margin-bottom: 24px;">
+        <div class="cat-label" style="margin-bottom: 4px; font-size: 11px; font-weight: 800;">📦 Quick Service Orders</div>
+        <div class="dashboard-grid" id="gridQuick"></div>
+      </div>
     </div>
 
     <!-- Left Panel: Responsive Grid of Food Cards -->
@@ -1395,11 +1608,28 @@
           <span>Grand Total</span>
           <span id="grandTotal">₹0</span>
         </div>
+        <div class="btn-row" style="margin-bottom: 8px;">
+          <button class="btn-kot" onclick="sendKot()">🍳 Send KOT</button>
+        </div>
         <div class="btn-row">
           <button class="btn-clear" onclick="clearBill()">🗑️ Clear</button>
           <button class="btn-print" onclick="openPrintModal()">🖨️ Generate Bill</button>
         </div>
       </div>
+    </div>
+  </div>
+
+  <!-- Mobile Floating Checkout Float Bar -->
+  <div class="mobile-checkout-bar" id="mobileCheckoutBar" onclick="switchMobileTab('order')">
+    <div style="display: flex; align-items: center; gap: 10px;">
+      <span style="font-size: 16px;">🛒</span>
+      <div>
+        <div id="checkoutBarItemsCount" style="font-weight: 800; font-size: 13px; color: var(--text-main);">0 Items</div>
+        <div id="checkoutBarTotal" style="font-size: 11px; color: var(--accent-gold); font-weight: 700;">₹0</div>
+      </div>
+    </div>
+    <div style="display: flex; align-items: center; gap: 4px; font-weight: 800; font-size: 12px; color: var(--accent-gold);">
+      View Order ➔
     </div>
   </div>
 
@@ -1632,27 +1862,22 @@
       ]}
     ];
 
-    let allItems = [];
-    let counter = 1;
-    menuData.forEach(cat => {
-      cat.items.forEach(([name, price]) => {
-        allItems.push({id: counter++, name, price, type: cat.type, cat: cat.cat, emoji: cat.emoji});
-      });
-    });
-
     const TABLES = ["T-1", "T-2", "T-3", "T-4", "T-5", "T-6", "T-7", "T-8", "T-9", "T-10", "Parcel", "Online"];
     let tableBills = {};
     let tableWaiters = {};
+    let tableStatuses = {};
     let currentTable = "T-1";
     let bill = []; // Always points to the current table's bill
     let activeFilter = "All";
     let billCounter = parseInt(localStorage.getItem('mauliBillNo') || '1000');
     let activeMobileTab = 'tables';
+    let activeView = 'dashboard'; // 'dashboard' or 'billing'
 
     // Retrieve active billing state from localStorage if exists
     function loadSavedBill() {
       const savedTableBills = localStorage.getItem('mauliTableBills');
       const savedTableWaiters = localStorage.getItem('mauliTableWaiters');
+      const savedTableStatuses = localStorage.getItem('mauliTableStatuses');
       const savedTable = localStorage.getItem('mauliCurrentTable') || 'T-1';
       const savedBillNo = localStorage.getItem('mauliCurrentBillNo');
 
@@ -1676,6 +1901,19 @@
           tableWaiters[savedTable] = savedWaiter;
         }
       }
+
+      if (savedTableStatuses) {
+        tableStatuses = JSON.parse(savedTableStatuses);
+      } else {
+        TABLES.forEach(t => tableStatuses[t] = 'blank');
+      }
+
+      // Safeguard: Make sure any table with items is marked as 'running'
+      TABLES.forEach(t => {
+        if ((tableBills[t] || []).length > 0 && (!tableStatuses[t] || tableStatuses[t] === 'blank')) {
+          tableStatuses[t] = 'running';
+        }
+      });
 
       currentTable = savedTable;
       bill = tableBills[currentTable] || [];
@@ -1713,6 +1951,7 @@
       tableBills[currentTable] = [...bill];
       localStorage.setItem('mauliTableBills', JSON.stringify(tableBills));
       localStorage.setItem('mauliTableWaiters', JSON.stringify(tableWaiters));
+      localStorage.setItem('mauliTableStatuses', JSON.stringify(tableStatuses));
       localStorage.setItem('mauliCurrentTable', currentTable);
       localStorage.setItem('mauliCurrentBillNo', document.getElementById('billNo').value);
     }
@@ -1750,6 +1989,28 @@
     function updateWaiterName(val) {
       tableWaiters[currentTable] = val;
       backupCurrentBill();
+    }
+
+    // Navigation routines
+    function goToDashboard() {
+      activeView = 'dashboard';
+      document.body.classList.remove('view-billing');
+      document.body.classList.add('view-dashboard');
+      
+      // On mobile, sync with tables tab
+      switchMobileTab('tables');
+      renderTablesDashboard();
+    }
+
+    function selectAndGoToBilling(tableId) {
+      switchTable(tableId);
+      
+      activeView = 'billing';
+      document.body.classList.remove('view-dashboard');
+      document.body.classList.add('view-billing');
+      
+      // On mobile, take user straight to food menu tab
+      switchMobileTab('menu');
     }
 
     function renderFilters() {
@@ -1810,6 +2071,11 @@
         bill.push({...item, qty: 1});
       }
       
+      // Update state to running
+      if (!tableStatuses[currentTable] || tableStatuses[currentTable] === 'blank') {
+        tableStatuses[currentTable] = 'running';
+      }
+      
       renderBill();
       backupCurrentBill();
       renderTablesDashboard();
@@ -1844,6 +2110,9 @@
           mobileOrderBadge.style.display = 'none';
         }
       }
+
+      // Update mobile floating checkout bar
+      updateMobileCheckoutBar();
 
       if (!bill.length) {
         container.innerHTML = `
@@ -1880,6 +2149,14 @@
       if (bill[i].qty <= 0) {
         bill.splice(i, 1);
       }
+      
+      // If table is completely cleared of items, reset status to blank
+      if (bill.length === 0) {
+        tableStatuses[currentTable] = 'blank';
+      } else if (tableStatuses[currentTable] === 'blank') {
+        tableStatuses[currentTable] = 'running';
+      }
+      
       renderBill();
       backupCurrentBill();
       renderTablesDashboard();
@@ -1887,6 +2164,11 @@
 
     function removeItem(i) {
       bill.splice(i, 1);
+      
+      if (bill.length === 0) {
+        tableStatuses[currentTable] = 'blank';
+      }
+      
       renderBill();
       backupCurrentBill();
       renderTablesDashboard();
@@ -1898,6 +2180,7 @@
       bill = [];
       tableBills[currentTable] = [];
       tableWaiters[currentTable] = '';
+      tableStatuses[currentTable] = 'blank'; // Available table again
       document.getElementById('waiterName').value = '';
       
       renderBill();
@@ -1906,22 +2189,70 @@
       backupCurrentBill();
     }
 
-    function renderTablesDashboard() {
-      const tablesBar = document.getElementById('tablesBar');
-      const mobileTablesGrid = document.getElementById('mobileTablesGrid');
+    function sendKot() {
+      if (!bill.length) {
+        alert("Cannot generate KOT: Your order cart is empty!");
+        return;
+      }
       
+      tableStatuses[currentTable] = 'kot';
+      backupCurrentBill();
+      renderTablesDashboard();
+      alert(`🍳 Kitchen Order Ticket (KOT) sent successfully for ${currentTable}!\nTable status updated to KOT Active.`);
+    }
+
+    function renderTablesDashboard() {
+      const gridAc = document.getElementById('gridAc');
+      const gridNonAc = document.getElementById('gridNonAc');
+      const gridQuick = document.getElementById('gridQuick');
+      const tablesBar = document.getElementById('tablesBar');
+      
+      let acHtml = '';
+      let nonAcHtml = '';
+      let quickHtml = '';
       let barHtml = '';
-      let gridHtml = '';
       let activeTablesCount = 0;
       
       TABLES.forEach(t => {
         const tBill = tableBills[t] || [];
         const itemsCount = tBill.reduce((sum, item) => sum + item.qty, 0);
         const subtotal = tBill.reduce((sum, item) => sum + (item.price * item.qty), 0);
+        const status = tableStatuses[t] || 'blank';
         const isActive = t === currentTable;
         const hasItems = itemsCount > 0;
         
         if (hasItems) activeTablesCount++;
+        
+        // Define visual statuses matching screenshot
+        let statusText = 'Available';
+        let iconHtml = '';
+        
+        if (status === 'running') {
+          statusText = `🔵 ${itemsCount} items · ₹${subtotal}`;
+        } else if (status === 'kot') {
+          statusText = `🟡 KOT · ₹${subtotal}`;
+          iconHtml = `<span class="status-icon">🍳</span>`;
+        } else if (status === 'printed') {
+          statusText = `🟢 Printed · ₹${subtotal}`;
+          iconHtml = `<span class="status-icon">🖨️</span>`;
+        }
+        
+        const cardHtml = `
+          <div class="dashboard-card status-${status}" onclick="selectAndGoToBilling('${t}')">
+            ${iconHtml}
+            <span class="card-table-name">${t}</span>
+            <span class="card-table-status" style="font-weight:600; font-size:10px;">${statusText}</span>
+          </div>
+        `;
+        
+        // Slice into grids
+        if (["T-1", "T-2", "T-3", "T-4", "T-5"].includes(t)) {
+          acHtml += cardHtml;
+        } else if (["T-6", "T-7", "T-8", "T-9", "T-10"].includes(t)) {
+          nonAcHtml += cardHtml;
+        } else {
+          quickHtml += cardHtml;
+        }
         
         // Desktop horizontal scrollbar
         barHtml += `
@@ -1930,18 +2261,12 @@
             <span class="table-tab-status">${hasItems ? `${itemsCount} items (₹${subtotal})` : 'Empty'}</span>
           </div>
         `;
-        
-        // Mobile grid
-        gridHtml += `
-          <div class="mobile-table-card${isActive ? ' active' : ''}${hasItems ? ' has-items' : ''}" onclick="switchTable('${t}'); switchMobileTab('menu');">
-            <span class="mobile-table-name">${t}</span>
-            <span class="mobile-table-status">${hasItems ? `${itemsCount} items<br>₹${subtotal}` : 'Empty'}</span>
-          </div>
-        `;
       });
       
+      if (gridAc) gridAc.innerHTML = acHtml;
+      if (gridNonAc) gridNonAc.innerHTML = nonAcHtml;
+      if (gridQuick) gridQuick.innerHTML = quickHtml;
       if (tablesBar) tablesBar.innerHTML = barHtml;
-      if (mobileTablesGrid) mobileTablesGrid.innerHTML = gridHtml;
       
       const countText = document.getElementById('activeTablesCountText');
       if (countText) countText.textContent = `Active: ${activeTablesCount} / 12`;
@@ -1969,6 +2294,26 @@
         if (tab === 'tables') navItems[0].classList.add('active');
         else if (tab === 'menu') navItems[1].classList.add('active');
         else if (tab === 'order') navItems[2].classList.add('active');
+      }
+
+      // Sync mobile checkout float visibility
+      updateMobileCheckoutBar();
+    }
+
+    function updateMobileCheckoutBar() {
+      const bar = document.getElementById('mobileCheckoutBar');
+      if (!bar) return;
+
+      const totalQty = bill.reduce((s, b) => s + b.qty, 0);
+      const grandTotal = bill.reduce((s, b) => s + (b.price * b.qty), 0);
+
+      // Display floating bar ONLY on mobile Menu tab when current table has items
+      if (window.innerWidth <= 768 && activeMobileTab === 'menu' && totalQty > 0) {
+        document.getElementById('checkoutBarItemsCount').textContent = `${totalQty} Items`;
+        document.getElementById('checkoutBarTotal').textContent = `₹${grandTotal.toFixed(2)}`;
+        bar.style.display = 'flex';
+      } else {
+        bar.style.display = 'none';
       }
     }
 
@@ -2020,6 +2365,11 @@
       
       document.getElementById('receiptQrImg').src = qrUrl;
 
+      // Mark status as printed
+      tableStatuses[currentTable] = 'printed';
+      backupCurrentBill();
+      renderTablesDashboard();
+
       // Open Modal Overlay
       document.getElementById('printModal').classList.add('active');
     }
@@ -2033,6 +2383,7 @@
       bill = [];
       tableBills[currentTable] = [];
       tableWaiters[currentTable] = '';
+      tableStatuses[currentTable] = 'blank'; // Reset back to empty
       
       document.getElementById('waiterName').value = '';
       
@@ -2192,6 +2543,10 @@
     renderBill();
     renderTablesDashboard();
     loadSettings();
+
+    // Land on dashboard view by default on load
+    activeView = 'dashboard';
+    document.body.classList.add('view-dashboard');
 
     // Check device ratio on load to initialize correct mobile view
     if (window.innerWidth <= 768) {
