@@ -1,0 +1,1515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mauli Dhaba - Premium POS</title>
+  
+  <!-- Premium Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- html2pdf.js library for high-quality client-side PDF generation -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+  <style>
+    :root {
+      --bg-dark: #0f090a;
+      --bg-gradient: radial-gradient(circle at 50% 50%, #201214 0%, #0d0607 100%);
+      --panel-bg: rgba(26, 15, 17, 0.75);
+      --card-bg: rgba(38, 22, 24, 0.45);
+      --card-bg-hover: rgba(56, 32, 35, 0.7);
+      
+      --accent-red: #A32626;
+      --accent-red-glow: rgba(163, 38, 38, 0.45);
+      --accent-gold: #D4AF37;
+      --accent-gold-gradient: linear-gradient(135deg, #F3E5AB 0%, #D4AF37 50%, #AA771C 100%);
+      --accent-gold-glow: rgba(212, 175, 55, 0.3);
+      
+      --text-main: #F5EBE6;
+      --text-muted: #D4C3B3;
+      --text-dark: #201214;
+      
+      --veg-green: #2ECC71;
+      --veg-glow: rgba(46, 204, 113, 0.4);
+      --nonveg-red: #E74C3C;
+      --nonveg-glow: rgba(231, 76, 60, 0.4);
+      
+      --border-light: rgba(212, 175, 55, 0.12);
+      --border-hover: rgba(212, 175, 55, 0.4);
+      --glass-blur: blur(12px);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: var(--bg-dark);
+      background-image: var(--bg-gradient);
+      color: var(--text-main);
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* Scrollbar Styling */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: rgba(0, 0, 0, 0.2);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(212, 175, 55, 0.2);
+      border-radius: 3px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--accent-gold);
+    }
+
+    /* Header Section */
+    .header {
+      background: var(--panel-bg);
+      backdrop-filter: var(--glass-blur);
+      border-bottom: 1px solid var(--border-light);
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      flex-shrink: 0;
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.4);
+      z-index: 10;
+    }
+
+    .header-left {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .header-left h1 {
+      font-family: 'Cinzel', serif;
+      font-size: 26px;
+      font-weight: 900;
+      background: var(--accent-gold-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: 2px;
+      filter: drop-shadow(0 2px 8px var(--accent-gold-glow));
+    }
+
+    .header-left p {
+      font-size: 11px;
+      color: var(--text-muted);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      opacity: 0.8;
+      margin-top: 2px;
+    }
+
+    .header-right {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+    }
+
+    .bill-meta {
+      display: flex;
+      gap: 12px;
+    }
+
+    .meta-field {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .meta-field label {
+      font-size: 9px;
+      color: var(--accent-gold);
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      opacity: 0.9;
+    }
+
+    .meta-field input, .meta-field select {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-light);
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-main);
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+
+    .meta-field input:focus, .meta-field select:focus {
+      outline: none;
+      border-color: var(--accent-gold);
+      background: rgba(255, 255, 255, 0.1);
+      box-shadow: 0 0 10px rgba(212, 175, 55, 0.25);
+    }
+
+    .meta-field select option {
+      color: var(--text-dark);
+      background: #FFFFFF;
+      font-weight: 600;
+    }
+
+    /* Sub-header Controls */
+    .controls-strip {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 10px 24px;
+      background: rgba(18, 10, 11, 0.8);
+      border-bottom: 1px solid var(--border-light);
+      flex-shrink: 0;
+    }
+
+    .filter-strip {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+      flex: 1;
+    }
+
+    .filter-strip::-webkit-scrollbar {
+      height: 3px;
+    }
+
+    .filter-btn {
+      padding: 6px 16px;
+      border-radius: 20px;
+      border: 1px solid var(--border-light);
+      background: var(--card-bg);
+      cursor: pointer;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      white-space: nowrap;
+      color: var(--text-muted);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .filter-btn:hover {
+      border-color: var(--accent-gold);
+      color: var(--text-main);
+      transform: translateY(-1px);
+    }
+
+    .filter-btn.active {
+      background: var(--accent-gold-gradient);
+      color: var(--text-dark);
+      border-color: transparent;
+      font-weight: 700;
+      box-shadow: 0 0 12px var(--accent-gold-glow);
+    }
+
+    .search-wrap {
+      position: relative;
+      width: 280px;
+      flex-shrink: 0;
+    }
+
+    .search-wrap input {
+      width: 100%;
+      padding: 8px 16px 8px 36px;
+      border-radius: 20px;
+      border: 1px solid var(--border-light);
+      font-size: 12px;
+      background: var(--card-bg);
+      color: var(--text-main);
+      transition: all 0.3s ease;
+    }
+
+    .search-wrap input:focus {
+      outline: none;
+      border-color: var(--accent-gold);
+      background: var(--card-bg-hover);
+      box-shadow: 0 0 10px rgba(212, 175, 55, 0.2);
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 12px;
+      height: 12px;
+      border: 2px solid var(--text-muted);
+      border-radius: 50%;
+      display: inline-block;
+    }
+    .search-icon::after {
+      content: '';
+      position: absolute;
+      width: 5px;
+      height: 2px;
+      background: var(--text-muted);
+      transform: rotate(45deg);
+      bottom: -3px;
+      right: -3px;
+    }
+
+    /* Main Area Layout */
+    .main {
+      display: flex;
+      flex: 1;
+      overflow: hidden;
+    }
+
+    /* Left Menu Grid */
+    .left-panel {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .category {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .cat-label {
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--accent-gold);
+      background: rgba(212, 175, 55, 0.08);
+      border: 1px solid var(--border-light);
+      padding: 4px 14px;
+      border-radius: 12px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      width: fit-content;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .items-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+      gap: 10px;
+    }
+
+    .item-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-light);
+      border-radius: 12px;
+      padding: 10px 12px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      position: relative;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      overflow: hidden;
+    }
+
+    .item-card:hover {
+      border-color: var(--accent-gold);
+      background: var(--card-bg-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(212, 175, 55, 0.15);
+    }
+
+    .item-card:active {
+      transform: scale(0.97);
+    }
+
+    .item-num {
+      background: rgba(212, 175, 55, 0.12);
+      color: var(--accent-gold);
+      font-size: 11px;
+      font-weight: 800;
+      min-width: 32px;
+      height: 26px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      border: 1px solid rgba(212, 175, 55, 0.2);
+    }
+
+    .item-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .item-name {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-main);
+      line-height: 1.4;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin-bottom: 2px;
+    }
+
+    .item-price {
+      font-size: 12px;
+      color: var(--accent-gold);
+      font-weight: 700;
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      box-shadow: 0 0 6px var(--dot-glow);
+    }
+
+    .dot.veg {
+      background: var(--veg-green);
+      --dot-glow: var(--veg-glow);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .dot.nonveg {
+      background: var(--nonveg-red);
+      --dot-glow: var(--nonveg-glow);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    /* Right Sidebar (Billing) */
+    .right-panel {
+      width: 340px;
+      border-left: 1px solid var(--border-light);
+      background: var(--panel-bg);
+      backdrop-filter: var(--glass-blur);
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+      box-shadow: -4px 0 30px rgba(0, 0, 0, 0.3);
+    }
+
+    .quick-add {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .quick-add-row {
+      display: flex;
+      gap: 8px;
+    }
+
+    .quick-add-row input {
+      flex: 1;
+      padding: 10px;
+      border-radius: 10px;
+      border: 1px solid var(--border-light);
+      background: rgba(0, 0, 0, 0.2);
+      font-size: 22px;
+      font-weight: 800;
+      text-align: center;
+      color: var(--accent-gold);
+      transition: all 0.3s ease;
+    }
+
+    .quick-add-row input:focus {
+      outline: none;
+      border-color: var(--accent-gold);
+      background: rgba(0, 0, 0, 0.3);
+      box-shadow: 0 0 10px rgba(212, 175, 55, 0.15);
+    }
+
+    /* Hide arrows from number input */
+    .quick-add-row input::-webkit-outer-spin-button,
+    .quick-add-row input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    .quick-add-row button {
+      padding: 0 16px;
+      border-radius: 10px;
+      background: var(--accent-gold-gradient);
+      color: var(--text-dark);
+      border: none;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 700;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 10px var(--accent-gold-glow);
+    }
+
+    .quick-add-row button:hover {
+      filter: brightness(1.1);
+      transform: translateY(-1px);
+    }
+
+    .quick-add p {
+      font-size: 10px;
+      color: var(--text-muted);
+      text-align: center;
+      margin-top: 6px;
+      opacity: 0.7;
+    }
+
+    .bill-header {
+      padding: 10px 16px;
+      border-bottom: 1px solid var(--border-light);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(0, 0, 0, 0.15);
+    }
+
+    .bill-header span {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .bill-badge {
+      background: var(--accent-red);
+      color: white;
+      font-size: 10px;
+      font-weight: 800;
+      border-radius: 10px;
+      padding: 2px 8px;
+      margin-left: 6px;
+      box-shadow: 0 0 8px var(--accent-red-glow);
+    }
+
+    .bill-items {
+      flex: 1;
+      overflow-y: auto;
+      padding: 10px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .bill-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(212, 175, 55, 0.05);
+      border-radius: 10px;
+      animation: slideIn 0.25s ease-out;
+    }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateX(20px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    .bill-item-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .bill-item-code {
+      font-size: 10px;
+      color: var(--accent-gold);
+      font-weight: 700;
+      margin-bottom: 2px;
+    }
+
+    .bill-item-name {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-main);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .qty-ctrl {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(0, 0, 0, 0.2);
+      padding: 3px;
+      border-radius: 6px;
+      border: 1px solid var(--border-light);
+    }
+
+    .qty-btn {
+      width: 22px;
+      height: 22px;
+      border-radius: 4px;
+      border: none;
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text-main);
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+
+    .qty-btn:hover {
+      background: var(--accent-gold);
+      color: var(--text-dark);
+    }
+
+    .qty-num {
+      font-size: 12px;
+      min-width: 18px;
+      text-align: center;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .bill-item-price {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--accent-gold);
+      min-width: 50px;
+      text-align: right;
+    }
+
+    .del-btn {
+      color: var(--nonveg-red);
+      cursor: pointer;
+      font-size: 18px;
+      font-weight: 800;
+      padding: 0 4px;
+      transition: all 0.2s;
+      opacity: 0.6;
+    }
+
+    .del-btn:hover {
+      opacity: 1;
+      transform: scale(1.15);
+    }
+
+    .empty-bill {
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--text-muted);
+      font-size: 13px;
+      line-height: 1.8;
+      opacity: 0.6;
+      border: 1px dashed var(--border-light);
+      border-radius: 12px;
+      margin-top: 10px;
+    }
+
+    /* Bill Footer */
+    .bill-footer {
+      padding: 16px;
+      background: rgba(0, 0, 0, 0.3);
+      border-top: 1px solid var(--border-light);
+      flex-shrink: 0;
+    }
+
+    .footer-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+
+    .grand {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 19px;
+      font-weight: 800;
+      color: var(--accent-gold);
+      margin: 10px 0;
+      padding-top: 10px;
+      border-top: 1px solid var(--border-light);
+    }
+
+    .btn-row {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .btn-clear {
+      flex: 1;
+      padding: 10px;
+      border-radius: 10px;
+      border: 1px solid var(--accent-red);
+      color: #FF5E5E;
+      background: rgba(163, 38, 38, 0.08);
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 600;
+      transition: all 0.3s;
+    }
+
+    .btn-clear:hover {
+      background: var(--accent-red);
+      color: white;
+    }
+
+    .btn-print {
+      flex: 2;
+      padding: 10px;
+      border-radius: 10px;
+      background: var(--accent-gold-gradient);
+      color: var(--text-dark);
+      border: none;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 800;
+      transition: all 0.3s;
+      box-shadow: 0 4px 15px rgba(212, 175, 55, 0.2);
+    }
+
+    .btn-print:hover {
+      filter: brightness(1.1);
+      box-shadow: 0 4px 20px rgba(212, 175, 55, 0.4);
+    }
+
+    /* Print Preview Modal overlay */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(8px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .modal-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .modal-container {
+      background: var(--bg-dark);
+      border: 1px solid var(--accent-gold);
+      border-radius: 16px;
+      width: 480px;
+      max-width: 90%;
+      max-height: 90vh;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8), 0 0 30px rgba(212, 175, 55, 0.15);
+      transform: scale(0.9);
+      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .modal-overlay.active .modal-container {
+      transform: scale(1);
+    }
+
+    .modal-header {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border-light);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .modal-header h3 {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--accent-gold);
+      letter-spacing: 0.5px;
+    }
+
+    .modal-close {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 22px;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+
+    .modal-close:hover {
+      color: var(--accent-red);
+    }
+
+    .modal-body {
+      padding: 20px;
+      overflow-y: auto;
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      background: #160e10;
+    }
+
+    /* Bill Receipt styling (Realistic Thermal Paper) */
+    .receipt-paper-wrap {
+      background: white;
+      color: #222222;
+      padding: 24px 20px;
+      width: 100%;
+      max-width: 360px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 12px;
+      line-height: 1.4;
+      border-radius: 2px;
+      position: relative;
+    }
+
+    /* Jagged edge styling on receipt */
+    .receipt-paper-wrap::before {
+      content: "";
+      position: absolute;
+      top: -6px;
+      left: 0;
+      width: 100%;
+      height: 6px;
+      background: linear-gradient(-45deg, #160e10 3px, transparent 0), linear-gradient(45deg, #160e10 3px, transparent 0);
+      background-size: 6px 12px;
+    }
+
+    .receipt-paper-wrap::after {
+      content: "";
+      position: absolute;
+      bottom: -6px;
+      left: 0;
+      width: 100%;
+      height: 6px;
+      background: linear-gradient(-45deg, transparent 3px, #160e10 0), linear-gradient(45deg, transparent 3px, #160e10 0);
+      background-size: 6px 12px;
+    }
+
+    .receipt-title {
+      font-family: 'Cinzel', serif;
+      font-weight: 900;
+      text-align: center;
+      font-size: 18px;
+      margin-bottom: 4px;
+      letter-spacing: 1px;
+      color: #111;
+    }
+
+    .receipt-sub {
+      text-align: center;
+      font-size: 10px;
+      line-height: 1.3;
+      margin-bottom: 12px;
+      color: #444;
+    }
+
+    .receipt-divider {
+      border-top: 1px dashed #333;
+      margin: 8px 0;
+    }
+
+    .receipt-meta-table {
+      width: 100%;
+      margin-bottom: 8px;
+    }
+
+    .receipt-meta-table td {
+      padding: 2px 0;
+      font-size: 11px;
+    }
+
+    .receipt-items-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 8px 0;
+    }
+
+    .receipt-items-table th {
+      border-bottom: 1px solid #111;
+      padding: 4px 0;
+      font-size: 11px;
+      text-align: left;
+      font-weight: bold;
+    }
+
+    .receipt-items-table td {
+      padding: 4px 0;
+      font-size: 11px;
+      vertical-align: top;
+    }
+
+    .receipt-total-row {
+      font-size: 14px;
+      font-weight: bold;
+      border-top: 1px dashed #333;
+      padding-top: 6px;
+    }
+
+    .receipt-footer {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 10px;
+      color: #333;
+    }
+
+    .receipt-footer p {
+      margin-bottom: 3px;
+    }
+
+    .modal-footer {
+      padding: 16px 20px;
+      border-top: 1px solid var(--border-light);
+      display: flex;
+      gap: 10px;
+    }
+
+    .btn-action-download {
+      flex: 1;
+      padding: 12px;
+      border-radius: 8px;
+      border: none;
+      background: var(--accent-gold-gradient);
+      color: var(--text-dark);
+      font-weight: 700;
+      font-size: 12px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all 0.25s;
+    }
+
+    .btn-action-download:hover {
+      filter: brightness(1.15);
+      box-shadow: 0 4px 15px var(--accent-gold-glow);
+    }
+
+    .btn-action-print {
+      flex: 1;
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid var(--accent-gold);
+      background: rgba(212, 175, 55, 0.08);
+      color: var(--accent-gold);
+      font-weight: 700;
+      font-size: 12px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all 0.25s;
+    }
+
+    .btn-action-print:hover {
+      background: var(--accent-gold);
+      color: var(--text-dark);
+    }
+
+    /* Print styling rules */
+    @media print {
+      body * {
+        visibility: hidden;
+      }
+      #printAreaRoot, #printAreaRoot * {
+        visibility: visible;
+      }
+      #printAreaRoot {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        background: white !important;
+        color: black !important;
+        padding: 0;
+        margin: 0;
+        box-shadow: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navigation Header -->
+  <div class="header">
+    <div class="header-left">
+      <h1>॥ माउली ढाबा ॥</h1>
+      <p>Khalapur, Dist. Raigad · Since 1991</p>
+    </div>
+    <div class="header-right">
+      <div class="bill-meta">
+        <div class="meta-field">
+          <label>Bill No.</label>
+          <input type="text" id="billNo" placeholder="Auto" style="width: 85px;" readonly>
+        </div>
+        <div class="meta-field">
+          <label>Table No.</label>
+          <select id="tableNo" onchange="backupCurrentBill()">
+            <option value="">Select</option>
+            <option value="T-1">T-1</option>
+            <option value="T-2">T-2</option>
+            <option value="T-3">T-3</option>
+            <option value="T-4">T-4</option>
+            <option value="T-5">T-5</option>
+            <option value="T-6">T-6</option>
+            <option value="T-7">T-7</option>
+            <option value="T-8">T-8</option>
+            <option value="T-9">T-9</option>
+            <option value="T-10">T-10</option>
+            <option value="Parcel">Parcel</option>
+            <option value="Online">Online</option>
+          </select>
+        </div>
+        <div class="meta-field">
+          <label>Waiter</label>
+          <input type="text" id="waiterName" placeholder="Name" style="width: 100px;" oninput="backupCurrentBill()">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sub-header Filtering & Searching Controls -->
+  <div class="controls-strip">
+    <div class="filter-strip" id="filterBar"></div>
+    <div class="search-wrap">
+      <span class="search-icon"></span>
+      <input type="text" id="searchBox" placeholder="Search menu item...">
+    </div>
+  </div>
+
+  <!-- Main POS Interface split in two panes -->
+  <div class="main">
+    <!-- Left Panel: Responsive Grid of Food Cards -->
+    <div class="left-panel" id="menuPanel"></div>
+
+    <!-- Right Panel: Sidebar with order list and checkout -->
+    <div class="right-panel">
+      <!-- Quick item adder by code number -->
+      <div class="quick-add">
+        <div class="quick-add-row">
+          <input type="number" id="codeInput" placeholder="Code" min="1">
+          <button onclick="addByCode()">Add</button>
+        </div>
+        <p>Enter menu item code & press Enter to add instantly</p>
+      </div>
+      
+      <!-- List details -->
+      <div class="bill-header">
+        <span>Active Order <span class="bill-badge" id="billCount">0</span></span>
+        <span id="billInfo" style="font-size: 11px; color: var(--accent-gold); font-weight: 600;"></span>
+      </div>
+      
+      <!-- Bill Items Container -->
+      <div class="bill-items" id="billItems">
+        <div class="empty-bill">
+          No items added yet.<br>Click a menu card or enter an item code above to start the bill.
+        </div>
+      </div>
+      
+      <!-- Sidebar Footer Sum Calculations -->
+      <div class="bill-footer">
+        <div class="footer-row">
+          <span>Total Quantity</span>
+          <span id="itemCount" style="font-weight: 600; color: var(--text-main);">0 items</span>
+        </div>
+        <div class="footer-row">
+          <span>Subtotal</span>
+          <span id="subtotal" style="font-weight: 600; color: var(--text-main);">₹0</span>
+        </div>
+        <div class="grand">
+          <span>Grand Total</span>
+          <span id="grandTotal">₹0</span>
+        </div>
+        <div class="btn-row">
+          <button class="btn-clear" onclick="clearBill()">🗑️ Clear</button>
+          <button class="btn-print" onclick="openPrintModal()">🖨️ Generate Bill</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Beautiful glassmorphic modal preview containing receipt -->
+  <div class="modal-overlay" id="printModal">
+    <div class="modal-container">
+      <div class="modal-header">
+        <h3>🧾 Bill Invoice Receipt Preview</h3>
+        <button class="modal-close" onclick="closePrintModal()">×</button>
+      </div>
+      <div class="modal-body">
+        
+        <!-- The Actual Receipt on Premium white thermal paper layout -->
+        <div class="receipt-paper-wrap" id="printAreaRoot">
+          <h2 class="receipt-title">॥ माउली ढाबा ॥</h2>
+          <div class="receipt-sub">
+            Near Krishna Bharat Petroleum, Old Mumbai-Pune Highway<br>
+            Khalapur, Dist. Raigad 410202<br>
+            📞 Phone: 7261915663 / 8149731389
+          </div>
+          <div class="receipt-divider"></div>
+          
+          <table class="receipt-meta-table">
+            <tr>
+              <td style="font-weight: bold; width: 45%;">Bill No: <span id="rBillNo">MD-0000</span></td>
+              <td style="text-align: right; font-weight: bold;">Table: <span id="rTableNo">—</span></td>
+            </tr>
+            <tr>
+              <td>Waiter: <span id="rWaiterName">—</span></td>
+              <td style="text-align: right;">Date: <span id="rDate">24-May-2026</span></td>
+            </tr>
+          </table>
+          <div class="receipt-divider"></div>
+          
+          <table class="receipt-items-table">
+            <thead>
+              <tr>
+                <th style="width: 50%;">Item Description</th>
+                <th style="width: 15%; text-align: center;">Qty</th>
+                <th style="width: 15%; text-align: right;">Rate</th>
+                <th style="width: 20%; text-align: right;">Total</th>
+              </tr>
+            </thead>
+            <tbody id="rItemsBody">
+              <!-- Dynamically populated bill item rows go here -->
+            </tbody>
+          </table>
+          
+          <div class="receipt-divider"></div>
+          
+          <table style="width: 100%;">
+            <tr class="receipt-total-row">
+              <td>NET AMOUNT PAYABLE</td>
+              <td style="text-align: right;" id="rGrandTotal">₹0.00</td>
+            </tr>
+          </table>
+          
+          <div class="receipt-divider"></div>
+          
+          <div class="receipt-footer">
+            <p style="font-weight: bold;">Thank you for dining with us!</p>
+            <p>Please visit again 🙏</p>
+            <p style="margin-top: 10px; font-size: 8px; color: #888;">Powered by Mauli Dhaba POS System</p>
+          </div>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button class="btn-action-download" onclick="downloadPDFReceipt()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+          Save PDF File
+        </button>
+        <button class="btn-action-print" onclick="triggerSystemPrint()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+          Thermal Print
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Exact structural menu data matched from standard catalog
+    const menuData = [
+      {cat: "Veg Starters", emoji: "🥗", type: "veg", items: [
+        ["Roasted Papad", 20], ["Fry Papad", 30], ["Masala Papad", 60],
+        ["Chana Dry", 200], ["Chana Koliwada", 220], ["Matki Fry", 200],
+        ["Paneer Pakoda", 200], ["Paneer Koliwada", 220], ["Mushroom Koliwada", 230],
+        ["Paneer Mushroom Koliwada", 230], ["Masoor Fry", 200], ["Boiled Chana", 200],
+        ["Green Peas Garlic", 220], ["Green Peas Fry", 200], ["Green Salad", 100],
+        ["Paneer Chilli", 250], ["Mushroom Chilli", 250], ["Veg Chilli", 230],
+        ["Veg Manchurian Dry", 230], ["Paneer Crispy", 250], ["Mushroom Crispy", 250],
+        ["Veg Crispy", 230], ["Paneer 65", 300], ["Mushroom 65", 300], ["Veg 65", 280],
+        ["Veg Soup Manchow", 200], ["Tomato Soup", 180], ["Veg Clear Soup", 150]
+      ]},
+      {cat: "Non-Veg Starters", emoji: "🍗", type: "nonveg", items: [
+        ["Chicken Dry (Half)", 400], ["Chicken Dry (Full)", 800],
+        ["Chicken Lapeta", 250], ["Mutton Lapeta", 350], ["Chicken Roasted", 400],
+        ["Egg Boiled", 60], ["Egg Bhurji", 100], ["Gilli Bhurji", 120],
+        ["Omelette", 100], ["Half Fry Egg", 100], ["Egg Fry (Oil Fry)", 80], ["Egg Pakoda", 120],
+        ["Chicken Soup", 250], ["Chicken Miravani", 250], ["Mutton Miravani", 300],
+        ["Chicken Crispy", 300], ["Chicken Chilli", 250], ["Chicken Manchurian", 250], ["Chicken 65", 350]
+      ]},
+      {cat: "Veg Main Course", emoji: "🍛", type: "veg", items: [
+        ["Dal Fry", 180], ["Dal Tadka", 200], ["Matki Masala", 180], ["Matki Lapeta", 200],
+        ["Chana Masala", 180], ["Chana Lapeta", 200], ["Akkha Masoor Masala", 180], ["Akkha Masoor Lapeta", 200],
+        ["Green Peas Masala", 180], ["Green Peas Lapeta", 200], ["Kadhi Pakoda", 180], ["Pithla", 150],
+        ["Aloo Muttor", 180], ["Paneer Masala", 200], ["Paneer Lapeta", 250],
+        ["Paneer Muttor", 200], ["Paneer Muttor Lapeta", 250],
+        ["Paneer Mushroom Masala", 220], ["Paneer Mushroom Lapeta", 250],
+        ["Paneer Tikka Masala", 250], ["Paneer Kolhapuri", 200], ["Paneer Kurma", 240],
+        ["Paneer Bhurji", 250], ["Paneer Makkhanwala", 250], ["Paneer Pasanda", 250],
+        ["Palak Paneer", 220], ["Plain Palak", 180], ["Palak Muttor", 200],
+        ["Aloo Palak", 200], ["Mushroom Palak", 220], ["Mushroom Masala", 200], ["Mushroom Lapeta", 250],
+        ["Mushroom Muttor", 220], ["Mushroom Muttor Lapeta", 250], ["Mushroom Tikka Masala", 250],
+        ["Kaju Masala", 250], ["Kaju Lapeta", 300], ["Kaju Kolhapuri", 250],
+        ["Kaju Curry", 250], ["Kaju Muttor", 260], ["Mix Veg", 180],
+        ["Veg Kolhapuri", 200], ["Veg Makhani", 220], ["Veg Hyderabadi", 250],
+        ["Veg Mauli Special", 350], ["Veg Kurma", 200], ["Veg Kofta", 250],
+        ["Malai Kofta", 300], ["Veg Maratha", 250], ["Veg Kadhai", 300]
+      ]},
+      {cat: "Veg Handi", emoji: "🍲", type: "veg", items: [
+        ["Mix Veg Handi (Half)", 400], ["Mix Veg Handi (Full)", 700],
+        ["Paneer Handi (Half)", 450], ["Paneer Handi (Full)", 800],
+        ["Mushroom Handi (Half)", 450], ["Mushroom Handi (Full)", 800],
+        ["Paneer Mushroom Handi (Half)", 450], ["Paneer Mushroom Handi (Full)", 800],
+        ["Paneer Handi Lapeta (Half)", 520], ["Paneer Handi Lapeta (Full)", 900],
+        ["Mushroom Handi Lapeta (Half)", 520], ["Mushroom Handi Lapeta (Full)", 900],
+        ["Paneer Mushroom Handi Lapeta (Half)", 520], ["Paneer Mushroom Handi Lapeta (Full)", 900]
+      ]},
+      {cat: "Non-Veg Main Course", emoji: "🥘", type: "nonveg", items: [
+        ["Chicken Masala", 180], ["Chicken Masala Lapeta", 250],
+        ["Chicken Hyderabadi", 200], ["Chicken Patiala", 300],
+        ["Butter Chicken", 250], ["Chicken Curry", 180], ["Chicken Mughlai", 300],
+        ["Chicken Kolhapuri", 200], ["Chicken Maratha", 300], ["Chicken Tikka Masala", 350],
+        ["Mutton Masala", 350], ["Mutton Masala Lapeta", 400],
+        ["Mutton Hyderabadi", 400], ["Mutton Kolhapuri", 350],
+        ["Mutton Curry", 350], ["Mutton Patiala", 450], ["Mutton Mughlai", 400],
+        ["Egg Curry", 180], ["Egg Masala", 200], ["Egg Ghotala", 200]
+      ]},
+      {cat: "Non-Veg Handi", emoji: "🥣", type: "nonveg", items: [
+        ["Chicken Handi (Half)", 400], ["Chicken Handi (Full)", 700],
+        ["Chicken Handi Lapeta (Half)", 450], ["Chicken Handi Lapeta (Full)", 800],
+        ["Chicken Hyderabadi Handi (Half)", 500], ["Chicken Hyderabadi Handi (Full)", 900],
+        ["Butter Chicken Handi (Half)", 500], ["Butter Chicken Handi (Full)", 900],
+        ["Chicken Handi Kolhapuri (Half)", 450], ["Chicken Handi Kolhapuri (Full)", 800],
+        ["Mutton Handi (Half)", 850], ["Mutton Handi (Full)", 1500],
+        ["Mutton Handi Lapeta (Half)", 900], ["Mutton Handi Lapeta (Full)", 1600],
+        ["Mutton Handi Kolhapuri (Half)", 900], ["Mutton Handi Kolhapuri (Full)", 1550],
+        ["Mutton Handi Hyderabadi (Half)", 950], ["Mutton Handi Hyderabadi (Full)", 1600]
+      ]},
+      {cat: "Roti / Bread", emoji: "🫓", type: "veg", items: [
+        ["Tandoor Roti", 20], ["Butter Roti", 25], ["Garlic Roti", 30], ["Gehu Roti", 30],
+        ["Plain Paratha", 40], ["Paneer Paratha", 80], ["Aloo Paratha", 60], ["Veg Paratha", 60],
+        ["Plain Naan", 50], ["Butter Naan", 70], ["Garlic Naan", 80], ["Bhakri", 30]
+      ]},
+      {cat: "Veg Rice / Noodles", emoji: "🍚", type: "veg", items: [
+        ["Plain Rice (Half)", 60], ["Plain Rice (Full)", 120],
+        ["Jeera Rice (Half)", 70], ["Jeera Rice (Full)", 140],
+        ["Masala Rice (Half)", 80], ["Masala Rice (Full)", 150],
+        ["Veg Biryani", 250], ["Paneer Biryani", 300], ["Mushroom Biryani", 300],
+        ["Dal Khichdi", 220], ["Dal Khichdi Tadka", 230],
+        ["Palak Khichdi", 250], ["Palak Khichdi Tadka", 260],
+        ["Veg Fried Rice", 200], ["Veg Schezwan Rice", 220], ["Veg Triple Rice", 300],
+        ["Veg Noodles", 200], ["Veg Schezwan Noodles", 220], ["Veg Triple Noodles", 300]
+      ]},
+      {cat: "Non-Veg Rice / Noodles", emoji: "🍜", type: "nonveg", items: [
+        ["Chicken Biryani", 300], ["Mutton Biryani", 450], ["Egg Biryani", 250],
+        ["Egg Rice", 160], ["Chicken Fried Rice", 200], ["Chicken Schezwan Rice", 220],
+        ["Chicken Triple Rice", 300], ["Chicken Noodles", 200], ["Chicken Schezwan Noodles", 220],
+        ["Chicken Triple Noodles", 300], ["Egg Fried Rice", 180], ["Egg Schezwan Rice", 200]
+      ]}
+    ];
+
+    let allItems = [];
+    let counter = 1;
+    menuData.forEach(cat => {
+      cat.items.forEach(([name, price]) => {
+        allItems.push({id: counter++, name, price, type: cat.type, cat: cat.cat, emoji: cat.emoji});
+      });
+    });
+
+    let bill = [];
+    let activeFilter = "All";
+    let billCounter = parseInt(localStorage.getItem('mauliBillNo') || '1000');
+
+    // Retrieve active billing state from localStorage if exists
+    function loadSavedBill() {
+      const savedBill = localStorage.getItem('mauliCurrentBill');
+      const savedTable = localStorage.getItem('mauliCurrentTable');
+      const savedWaiter = localStorage.getItem('mauliCurrentWaiter');
+      const savedBillNo = localStorage.getItem('mauliCurrentBillNo');
+
+      if (savedBill) {
+        bill = JSON.parse(savedBill);
+      }
+      if (savedTable) {
+        document.getElementById('tableNo').value = savedTable;
+      }
+      if (savedWaiter) {
+        document.getElementById('waiterName').value = savedWaiter;
+      }
+      if (savedBillNo) {
+        document.getElementById('billNo').value = savedBillNo;
+      } else {
+        document.getElementById('billNo').value = getBillNoString();
+      }
+    }
+
+    function getBillNoString() {
+      return 'MD-' + billCounter;
+    }
+
+    function rollNewBillNo() {
+      billCounter++;
+      localStorage.setItem('mauliBillNo', billCounter);
+      const newNo = getBillNoString();
+      document.getElementById('billNo').value = newNo;
+      localStorage.setItem('mauliCurrentBillNo', newNo);
+      return newNo;
+    }
+
+    // Save state on mutations
+    function backupCurrentBill() {
+      localStorage.setItem('mauliCurrentBill', JSON.stringify(bill));
+      localStorage.setItem('mauliCurrentTable', document.getElementById('tableNo').value);
+      localStorage.setItem('mauliCurrentWaiter', document.getElementById('waiterName').value);
+      localStorage.setItem('mauliCurrentBillNo', document.getElementById('billNo').value);
+    }
+
+    function renderFilters() {
+      const bar = document.getElementById('filterBar');
+      const cats = ["All", "Veg", "Non-Veg", ...menuData.map(c => c.cat)];
+      bar.innerHTML = cats.map(c => 
+        `<button class="filter-btn${c === activeFilter ? ' active' : ''}" onclick="setFilter('${c}')">${c}</button>`
+      ).join('');
+    }
+
+    function setFilter(f) {
+      activeFilter = f;
+      renderFilters();
+      renderMenu();
+    }
+
+    function renderMenu() {
+      const search = document.getElementById('searchBox').value.toLowerCase();
+      const panel = document.getElementById('menuPanel');
+      let html = '';
+
+      menuData.forEach(cat => {
+        if (activeFilter !== 'All' && activeFilter !== cat.cat &&
+            !(activeFilter === 'Veg' && cat.type === 'veg') &&
+            !(activeFilter === 'Non-Veg' && cat.type === 'nonveg')) return;
+
+        const items = allItems.filter(i => i.cat === cat.cat && (!search || i.name.toLowerCase().includes(search)));
+        if (!items.length) return;
+
+        html += `
+          <div class="category">
+            <div class="cat-label">${cat.emoji} ${cat.cat}</div>
+            <div class="items-grid">
+              ${items.map(item => `
+                <div class="item-card" onclick="addToBill(${item.id})">
+                  <div class="item-num">${item.id}</div>
+                  <div class="item-info">
+                    <div class="item-name" title="${item.name}">${item.name}</div>
+                    <div class="item-price">₹${item.price}</div>
+                  </div>
+                  <div class="dot ${item.type}"></div>
+                </div>`).join('')}
+            </div>
+          </div>`;
+      });
+
+      panel.innerHTML = html || '<div style="padding:40px; text-align:center; color:var(--text-muted); font-size:13px; opacity:0.6;">No matched food items found.</div>';
+    }
+
+    function addToBill(id) {
+      const item = allItems.find(i => i.id === id);
+      if (!item) return;
+      
+      const existing = bill.find(b => b.id === id);
+      if (existing) {
+        existing.qty++;
+      } else {
+        bill.push({...item, qty: 1});
+      }
+      
+      renderBill();
+      backupCurrentBill();
+      
+      document.getElementById('codeInput').value = '';
+      document.getElementById('codeInput').focus();
+    }
+
+    function addByCode() {
+      const val = parseInt(document.getElementById('codeInput').value);
+      if (val) {
+        addToBill(val);
+      }
+    }
+
+    function renderBill() {
+      const container = document.getElementById('billItems');
+      const totalQty = bill.reduce((s, b) => s + b.qty, 0);
+      
+      document.getElementById('billCount').textContent = totalQty;
+      document.getElementById('itemCount').textContent = totalQty + ' items';
+      
+      const tbl = document.getElementById('tableNo').value;
+      document.getElementById('billInfo').textContent = tbl ? 'Table: ' + tbl : '';
+
+      if (!bill.length) {
+        container.innerHTML = `
+          <div class="empty-bill">
+            No items added yet.<br>Click a menu card or enter an item code above to start the bill.
+          </div>`;
+        document.getElementById('subtotal').textContent = '₹0';
+        document.getElementById('grandTotal').textContent = '₹0';
+        return;
+      }
+
+      container.innerHTML = bill.map((b, i) => `
+        <div class="bill-item">
+          <div class="bill-item-info">
+            <div class="bill-item-code">#${b.id} · ${b.type === 'veg' ? '🟢 Veg' : '🔴 Non-Veg'}</div>
+            <div class="bill-item-name">${b.name}</div>
+          </div>
+          <div class="qty-ctrl">
+            <button class="qty-btn" onclick="changeQty(${i},-1)">−</button>
+            <span class="qty-num">${b.qty}</span>
+            <button class="qty-btn" onclick="changeQty(${i},1)">+</button>
+          </div>
+          <div class="bill-item-price">₹${b.price * b.qty}</div>
+          <span class="del-btn" onclick="removeItem(${i})">×</span>
+        </div>`).join('');
+
+      const sub = bill.reduce((s, b) => s + (b.price * b.qty), 0);
+      document.getElementById('subtotal').textContent = '₹' + sub;
+      document.getElementById('grandTotal').textContent = '₹' + sub;
+    }
+
+    function changeQty(i, d) {
+      bill[i].qty += d;
+      if (bill[i].qty <= 0) {
+        bill.splice(i, 1);
+      }
+      renderBill();
+      backupCurrentBill();
+    }
+
+    function removeItem(i) {
+      bill.splice(i, 1);
+      renderBill();
+      backupCurrentBill();
+    }
+
+    function clearBill() {
+      if (bill.length && !confirm('Are you sure you want to clear the current bill details?')) return;
+      
+      bill = [];
+      renderBill();
+      rollNewBillNo();
+      
+      document.getElementById('tableNo').value = '';
+      document.getElementById('waiterName').value = '';
+      
+      backupCurrentBill();
+    }
+
+    // Modal Interaction
+    function openPrintModal() {
+      if (!bill.length) {
+        alert('Active bill is empty! Please add items first.');
+        return;
+      }
+
+      const billNo = document.getElementById('billNo').value || 'MD-1000';
+      const tableNo = document.getElementById('tableNo').value || '—';
+      const waiterName = document.getElementById('waiterName').value || '—';
+      
+      const date = new Date().toLocaleString('en-IN', {
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: true
+      });
+
+      // Populate print area content inside modal preview
+      document.getElementById('rBillNo').textContent = billNo;
+      document.getElementById('rTableNo').textContent = tableNo;
+      document.getElementById('rWaiterName').textContent = waiterName;
+      document.getElementById('rDate').textContent = date;
+
+      const itemsBody = document.getElementById('rItemsBody');
+      itemsBody.innerHTML = bill.map(b => `
+        <tr>
+          <td style="padding: 5px 0;">${b.name}</td>
+          <td style="text-align: center; padding: 5px 0;">${b.qty}</td>
+          <td style="text-align: right; padding: 5px 0;">₹${b.price.toFixed(2)}</td>
+          <td style="text-align: right; padding: 5px 0;">₹${(b.price * b.qty).toFixed(2)}</td>
+        </tr>
+      `).join('');
+
+      const grandTotal = bill.reduce((s, b) => s + (b.price * b.qty), 0);
+      document.getElementById('rGrandTotal').textContent = '₹' + grandTotal.toFixed(2);
+
+      // Open Modal Overlay
+      document.getElementById('printModal').classList.add('active');
+    }
+
+    function closePrintModal() {
+      document.getElementById('printModal').classList.remove('active');
+    }
+
+    // PDF Generation and Direct Download
+    function downloadPDFReceipt() {
+      const element = document.getElementById('printAreaRoot');
+      const billNo = document.getElementById('billNo').value || 'MD-1000';
+      
+      // Configuration details optimized for neat receipt sizes (fits perfectly on digital screens / sheets)
+      const opt = {
+        margin:       [10, 10, 10, 10],
+        filename:     `Mauli_Dhaba_Bill_${billNo}.pdf`,
+        image:        { type: 'jpeg', quality: 0.98 },
+        html2canvas:  { scale: 3, useCORS: true, letterRendering: true },
+        jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+      };
+
+      // Generate and save the PDF instantly
+      html2pdf().set(opt).from(element).save().then(() => {
+        // Roll new bill number automatically upon successful billing save
+        rollNewBillNo();
+        bill = [];
+        renderBill();
+        document.getElementById('tableNo').value = '';
+        document.getElementById('waiterName').value = '';
+        backupCurrentBill();
+        closePrintModal();
+        alert('Invoice PDF generated and saved successfully to your downloads folder!');
+      });
+    }
+
+    // Standard Direct Printing (Thermal compatibility)
+    function triggerSystemPrint() {
+      window.print();
+      
+      // Post print sequence
+      rollNewBillNo();
+      bill = [];
+      renderBill();
+      document.getElementById('tableNo').value = '';
+      document.getElementById('waiterName').value = '';
+      backupCurrentBill();
+      closePrintModal();
+    }
+
+    // Input Actions
+    document.getElementById('codeInput').addEventListener('keydown', e => {
+      if (e.key === 'Enter') addByCode();
+    });
+    
+    document.getElementById('searchBox').addEventListener('input', renderMenu);
+
+    // Initial sequence
+    loadSavedBill();
+    renderFilters();
+    renderMenu();
+    renderBill();
+  </script>
+</body>
+</html>
